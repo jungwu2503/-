@@ -77,9 +77,40 @@ public class DrawerFrame extends JFrame {
 			}
 		});
 		
+		JMenu figureMenu = new JMenu("그림(F)");
+		menus.add(figureMenu);
+		
+		JMenuItem figureBox = new JMenuItem("Box (B)");
+		figureMenu.add(figureBox);
+		figureBox.addActionListener( (e) ->
+				canvas.setWhatToDraw(DrawerView.DRAW_BOX) );
+
+		JMenuItem figureLine = new JMenuItem("Line (L)");
+		figureMenu.add(figureLine);
+		figureLine.addActionListener( (e) ->
+				canvas.setWhatToDraw(DrawerView.DRAW_LINE) );
+
+		JMenu toolMenu = new JMenu("도구(T)");
+		menus.add(toolMenu);
+		
+		JMenuItem modalTool = new JMenuItem("Modal (M)");
+		toolMenu.add(modalTool);
+		modalTool.addActionListener( (e) -> {
+					FigureDialog dialog = new FigureDialog("Figure Dialog");
+					dialog.setModal(true);
+					dialog.setVisible(true);
+				});
+		
+		JMenuItem modalessTool = new JMenuItem("Modaless (S)");
+		toolMenu.add(modalessTool);
+		/*modalessTool.addActionListener( (e) -> {
+			
+				});*/
+
+		
 		JMenu helpMenu = new JMenu("도움말(H)");
 		menus.add(helpMenu);
-		
+				
 		JMenuItem infoHelp = new JMenuItem("Drawer 정보(I)");
 		helpMenu.add(infoHelp);
 		infoHelp.addActionListener( (e) ->

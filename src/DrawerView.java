@@ -1,81 +1,43 @@
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
 
 public class DrawerView extends JPanel
 					implements MouseListener, MouseMotionListener {
-
-	int startX;
-	int startY;
-	int oldX;
-	int oldY;
+	
+	public static int DRAW_BOX = 1;
+	public static int DRAW_LINE = 2;
+	private int whatToDraw;
+	private Figure currentFigure;
+	// polymorphic collection
+	private ArrayList<Figure> figures = new ArrayList<Figure>();
 	
 	DrawerView() {
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
 	
+	void setWhatToDraw(int figureType) {
+		whatToDraw = figureType;
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		for (int i = 0; i < figures.size(); i++) {
+			Figure pFigure = figures.get(i);
+			pFigure.draw(g);
+		}		
+		
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		int minX = Math.min(startX, oldX);
-		int minY = Math.min(startY, oldY);
-		int width = Math.abs(oldX-startX);
-		int height = Math.abs(oldY-startY);	
-		
-		Graphics g = getGraphics();
+		Graphics g = getGraphics();		
 		g.setXORMode(getBackground());
-		// white : white -> white
-		// white : black -> black
-		// black : white -> black
-		// black : black -> white
-		g.drawRect(minX, minY, width, height);	
-		//g.setPaintMode();
-	///
-		int endX = e.getX();
-		int endY = e.getY();
-		
-		minX = Math.min(startX, endX);
-		minY = Math.min(startY, endY);
-		width = Math.abs(endX-startX);
-		height = Math.abs(endY-startY);
-		
-		g.drawRect(minX, minY, width, height);
-		
-		oldX = endX;
-		oldY = endY;
-		
-		/*int minX = Math.min(startX, oldX);
-		int minY = Math.min(startY, oldY);
-		int width = Math.abs(oldX-startX);
-		int height = Math.abs(oldY-startY);	
-		
-		Graphics g = getGraphics();
-		g.setColor(getBackground());
-		
-		g.drawRect(minX, minY, width, height);	
-		
-	///
-		int endX = e.getX();
-		int endY = e.getY();
-		
-		minX = Math.min(startX, endX);
-		minY = Math.min(startY, endY);
-		width = Math.abs(endX-startX);
-		height = Math.abs(endY-startY);
-		
-		g.setColor(Color.black);
-		g.drawRect(minX, minY, width, height);
-		
-		oldX = endX;
-		oldY = endY;		
-		*/		
+		currentFigure.drawing(g, e.getX(), e.getY());
 	}
 
 	@Override
@@ -90,25 +52,20 @@ public class DrawerView extends JPanel
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		startX = e.getX();
-		startY = e.getY();
-		
-		oldX = startX;
-		oldY = startY;
+		if (whatToDraw == DRAW_BOX) {
+			currentFigure = new Box(e.getX(),e.getY());
+		} else if (whatToDraw == DRAW_LINE) {
+			currentFigure = new Line(e.getX(),e.getY());
+		}		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		int endX = e.getX();
-		int endY = e.getY();
-		
-		int minX = Math.min(startX, endX);
-		int minY = Math.min(startY, endY);
-		int width = Math.abs(endX-startX);
-		int height = Math.abs(endY-startY);
-		
 		Graphics g = getGraphics();
-		g.drawRect(minX, minY, width, height);
+		currentFigure.setXY2(e.getX(), e.getY());
+		currentFigure.draw(g);
+		figures.add(currentFigure);
+		currentFigure = null;
 	}
 
 	@Override
