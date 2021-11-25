@@ -15,6 +15,7 @@ public class DrawerView extends JPanel
 	private ArrayList<Figure> figures = new ArrayList<Figure>();
 	
 	DrawerView() {
+		whatToDraw = DRAW_BOX;
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -40,8 +41,28 @@ public class DrawerView extends JPanel
 		currentFigure.drawing(g, e.getX(), e.getY());
 	}
 
+	private Figure find(int x, int y) {
+		for (int i = 0; i < figures.size(); i++) {
+			Figure pFigure = figures.get(i);
+			if (pFigure.contains(x,y)) {
+				return pFigure;
+			}
+		}	
+		return null;
+	}
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		
+		currentFigure = find(x,y);
+		
+		if (currentFigure != null) {
+			setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+		} else {
+			setCursor(Cursor.getDefaultCursor());
+		}
 		
 	}
 
@@ -64,10 +85,17 @@ public class DrawerView extends JPanel
 		Graphics g = getGraphics();
 		currentFigure.setXY2(e.getX(), e.getY());
 		currentFigure.draw(g);
+		currentFigure.makeRegion();
+		g.fillPolygon(currentFigure.region);
 		figures.add(currentFigure);
 		currentFigure = null;
 	}
 
+	public void addFigure(Figure newFigure) {
+		figures.add(newFigure);
+		repaint();
+	}
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		

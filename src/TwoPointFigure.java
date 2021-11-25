@@ -1,4 +1,4 @@
-import java.awt.Graphics;
+import java.awt.*;
 
 abstract public class TwoPointFigure extends Figure{
 
@@ -10,13 +10,42 @@ abstract public class TwoPointFigure extends Figure{
 	TwoPointFigure() {
 		super();
 	}
-	
+
 	TwoPointFigure(int x, int y) {
 		super();
 		x1 = x2 = x;
 		y1 = y2 = y;
 	}
-
+	
+	TwoPointFigure(int x1, int y1, int x2, int y2) {
+		super();
+		this.x1 = x1; this.y1 = y1;
+		this.x2 = x2; this.y2 = y2;
+	}
+	
+	void makeRegion() {
+		if (x1 > x2) {
+			int tmp = x1;
+			x1 = x2;
+			x2 = tmp;
+		}
+		if (y1 > y2) {
+			int tmp = y1;
+			y1 = y2;
+			y2 = tmp;
+		}
+		
+		int[] xpoints = new int[4];
+		int[] ypoints = new int[4];
+		
+		xpoints[0] = x1; ypoints[0] = y1;
+		xpoints[1] = x2; ypoints[1] = y1;
+		xpoints[2] = x2; ypoints[2] = y2;
+		xpoints[3] = x1; ypoints[3] = y2;
+		
+		region = new Polygon(xpoints, ypoints, 4);
+	}
+	
 	void setXY2(int x, int y) {
 		setX2(x); setY2(y);
 	}
