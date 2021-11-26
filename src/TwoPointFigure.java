@@ -23,6 +23,11 @@ abstract public class TwoPointFigure extends Figure{
 		this.x2 = x2; this.y2 = y2;
 	}
 	
+	void move(int dx, int dy) {
+		x1 = x1 + dx; y1 = y1 + dy;
+		x2 = x2 + dx; y2 = y2 + dy;
+	}
+	
 	void makeRegion() {
 		if (x1 > x2) {
 			int tmp = x1;
