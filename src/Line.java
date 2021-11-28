@@ -2,19 +2,20 @@ import java.awt.*;
 
 public class Line extends TwoPointFigure {
 	
-	Line() {
-		super();
+	Line(Color color) {
+		super(color);
 	}
 	
-	Line(int x, int y) {		 
-		super(x,y);
+	Line(Color color, int x, int y) {		 
+		super(color,x,y);
 	}
 	
-	Line(int x1, int y1, int x2, int y2) {	
-		super(x1,y1,x2,y2);
+	Line(Color color, int x1, int y1, int x2, int y2) {	
+		super(color,x1,y1,x2,y2);
 	}
 	
 	void draw(Graphics g) {
+		g.setColor(color);
 		g.drawLine(x1, y1, x2, y2); 
 	}
 
@@ -40,6 +41,13 @@ public class Line extends TwoPointFigure {
 		xpoints[3] = x + w + dx; ypoints[3] = y + h + dy;
 		
 		region = new Polygon(xpoints, ypoints, 4);
+	}
+	
+	Figure copy() {
+		Line newLine = new Line(color,x1,y1,x2,y2);
+		newLine.popup = popup;
+		newLine.move(MOVE_DX, MOVE_DY);
+		return newLine;
 	}
 	
 }

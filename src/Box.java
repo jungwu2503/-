@@ -2,16 +2,26 @@ import java.awt.*;
 
 public class Box extends TwoPointFigure {
 
-	Box() {	
-		super();
+	private boolean fillFlag;
+	
+	Box(Color color) {	
+		super(color);
+		fillFlag = false;
 	}
 	
-	Box(int x, int y) {	
-		super(x,y);
+	Box(Color color, int x, int y) {	
+		super(color,x,y);
+		fillFlag = false;
 	}
 	
-	Box(int x1, int y1, int x2, int y2) {	
-		super(x1,y1,x2,y2);
+	Box(Color color, int x1, int y1, int x2, int y2) {	
+		super(color,x1,y1,x2,y2);
+		fillFlag = false;
+	}
+	
+	void setFill() {
+		fillFlag = !fillFlag;
+		
 	}
 	
 	void draw(Graphics g) {
@@ -20,8 +30,20 @@ public class Box extends TwoPointFigure {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
+		g.setColor(color);
 		g.drawRect(minX, minY, width, height);	
-
+		
+		if (fillFlag == true) {
+			g.fillRect(minX, minY, width, height);
+		}
 	}	
+	
+	Figure copy() {
+		Box newBox = new Box(color,x1,y1,x2,y2);
+		newBox.popup = popup;
+		newBox.fillFlag = fillFlag;
+		newBox.move(MOVE_DX, MOVE_DY);
+		return newBox;
+	}
 	
 }

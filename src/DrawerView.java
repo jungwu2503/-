@@ -16,18 +16,33 @@ public class DrawerView extends JPanel
 	
 	private int actionMode;
 	private int whatToDraw;
-	private Figure currentFigure;
-	// polymorphic collection
+	private Figure selectedFigure;
 	private ArrayList<Figure> figures = new ArrayList<Figure>();
 	
 	private int currentX;
 	private int currentY;
 	
+	Popup mainPopup;
+	Popup boxPopup;
+	Popup linePopup;
+	
 	DrawerView() {
+		mainPopup = new MainPopup(this);
+		boxPopup = new FigurePopup(this, "Box", true);
+		linePopup = new FigurePopup(this, "Line", false);
+		
 		actionMode = NOTHING;
 		whatToDraw = DRAW_BOX;
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+	
+	Popup boxPopup() {
+		return boxPopup;
+	}
+	
+	Popup linePopup() {
+		return linePopup;
 	}
 	
 	void setWhatToDraw(int figureType) {
@@ -51,9 +66,9 @@ public class DrawerView extends JPanel
 		Graphics g = getGraphics();		
 		g.setXORMode(getBackground());
 		if (actionMode == DRAWING) {
-			currentFigure.drawing(g, x, y);
+			selectedFigure.drawing(g, x, y);
 		} else if (actionMode == MOVING) {
-			currentFigure.move(g, x-currentX, y-currentY);
+			selectedFigure.move(g, x-currentX, y-currentY);
 			currentX = x;
 			currentY = y;
 		}
@@ -75,9 +90,9 @@ public class DrawerView extends JPanel
 		int x = e.getX();
 		int y = e.getY();
 		
-		currentFigure = find(x,y);
+		selectedFigure = find(x,y);
 		
-		if (currentFigure != null) {
+		if (selectedFigure != null) {
 			setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		} else {
 			setCursor(Cursor.getDefaultCursor());
@@ -95,20 +110,26 @@ public class DrawerView extends JPanel
 		int x = e.getX();
 		int y = e.getY();
 		
-		currentFigure = find(x,y);
-		if (currentFigure != null) {
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			actionMode = NOTHING;
+			return;
+		}
+		selectedFigure = find(x,y);
+		if (selectedFigure != null) {
 			actionMode = MOVING;
 			currentX = x;
 			currentY = y;
-			figures.remove(currentFigure);
+			figures.remove(selectedFigure);
 			repaint();
 			return;
 		}
 		
 		if (whatToDraw == DRAW_BOX) {
-			currentFigure = new Box(x,y);
+			selectedFigure = new Box(new Color(0,0,0),x,y);
+			selectedFigure.setPopup(boxPopup);
 		} else if (whatToDraw == DRAW_LINE) {
-			currentFigure = new Line(x,y);
+			selectedFigure = new Line(Color.black,x,y);
+			selectedFigure.setPopup(linePopup);
 		}
 		actionMode = DRAWING;
 	}
@@ -119,24 +140,89 @@ public class DrawerView extends JPanel
 		int y = e.getY();
 		
 		if (e.isPopupTrigger()) {
-			MainPopup popup = new MainPopup(this);
-			popup.popup(this,x,y);
+			selectedFigure = find(x,y);
+			if (selectedFigure == null) {
+				mainPopup.popup(this,x,y);
+			} else {
+				selectedFigure.popup(this,x,y);
+			}
+			
 			return;
 		}
 		Graphics g = getGraphics();
 		if (actionMode == DRAWING) {
-			currentFigure.setXY2(x, y);
+			selectedFigure.setXY2(x, y);
 		}
 		
-		currentFigure.draw(g);
-		addFigure(currentFigure);
-		currentFigure = null;
+		selectedFigure.draw(g);
+		addFigure(selectedFigure);
+		selectedFigure = null;
 	}
 
 	public void addFigure(Figure newFigure) {
 		newFigure.makeRegion();
 		figures.add(newFigure);
 		repaint();
+	}
+	
+	public void copyFigure() {
+		if (selectedFigure == null) return;
+		Figure newFigure = selectedFigure.copy();
+		addFigure(newFigure);
+		selectedFigure = newFigure;
+		repaint();
+	}
+	
+	public void deleteFigure() {
+		if (selectedFigure == null) return;
+		figures.remove(selectedFigure);
+		selectedFigure = null;
+		repaint();
+	}
+	
+	public void fillFigure() {
+		if (selectedFigure == null) return;
+		selectedFigure.setFill();
+		repaint();
+	}
+	
+	/*
+	public void fillFigure() {
+		if (selectedFigure == null) return;
+		if (selectedFigure instanceof Box) {
+			// down casting
+			Box pBox = (Box)selectedFigure;
+			pBox.setFill();
+		}
+		repaint();
+	} */
+	
+	public void setColorForSelectedFigure(Color color) {
+		if (selectedFigure == null) return;
+		selectedFigure.setColor(color);
+		repaint();
+	}
+	
+	public void showColorChooser() {
+		Color color = JColorChooser.showDialog(null,
+									"Color Chooser", Color.black);
+		setColorForSelectedFigure(color);
+	}
+	
+	public void setBlackColor() {
+		setColorForSelectedFigure(Color.black);
+	}
+		
+	public void setRedColor() {
+		setColorForSelectedFigure(Color.red);
+	}
+	
+	public void setGreenColor() {
+		setColorForSelectedFigure(Color.green);
+	}
+	
+	public void setBlueColor() {
+		setColorForSelectedFigure(Color.blue);
 	}
 	
 	@Override
