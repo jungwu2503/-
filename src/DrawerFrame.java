@@ -5,6 +5,12 @@ import javax.swing.*;
 
 public class DrawerFrame extends JFrame {
 	DrawerView canvas;
+	StatusBar statusBar;
+	
+	public void writePosition(String s) {
+		// delegation
+		statusBar.writePosition(s);
+	}
 	
 	DrawerFrame() {
 		setTitle("Drawer");
@@ -20,15 +26,18 @@ public class DrawerFrame extends JFrame {
 		Container container = this.getContentPane();
 		//container.setBackground(Color.red);
 		
-		canvas = new DrawerView();
-		container.add(canvas);
+		canvas = new DrawerView(this);
+		container.add(canvas,"Center");
+		statusBar = new StatusBar();
+		container.add(statusBar,"South");
 		
-		/*this.addKeyListener(new KeyAdapter() {
-			public void keyTyped(KeyEvent evt) {
-				Graphics g = getGraphics();
-				g.drawLine(0, 0, 200, 200);
+		addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
+				Dimension sz = canvas.getSize();
+				String s = "" + sz.width + " X " + sz.height + " px";
+				statusBar.writeSize(s);
 			}
-		}); */
+		});
 		
 		JMenuBar menus = new JMenuBar();
 		setJMenuBar(menus);
@@ -80,15 +89,23 @@ public class DrawerFrame extends JFrame {
 		JMenu figureMenu = new JMenu("그림(F)");
 		menus.add(figureMenu);
 		
-		JMenuItem figureBox = new JMenuItem("Box (B)");
+		JMenuItem figurePoint = new JMenuItem("Point (P)");
+		figureMenu.add(figurePoint);
+		figurePoint.addActionListener((evt) -> 
+				canvas.setWhatToDraw(DrawerView.ID_POINT));
+		
+		JMenuItem figureBox = new JMenuItem(canvas.getBoxAction());
 		figureMenu.add(figureBox);
-		figureBox.addActionListener( (e) ->
-				canvas.setWhatToDraw(DrawerView.DRAW_BOX) );
 
 		JMenuItem figureLine = new JMenuItem("Line (L)");
 		figureMenu.add(figureLine);
 		figureLine.addActionListener( (e) ->
-				canvas.setWhatToDraw(DrawerView.DRAW_LINE) );
+				canvas.setWhatToDraw(DrawerView.ID_LINE) );
+
+		JMenuItem figureCircle = new JMenuItem("Circle (C)");
+		figureMenu.add(figureCircle);
+		figureCircle.addActionListener( (e) ->
+				canvas.setWhatToDraw(DrawerView.ID_CIRCLE) );
 
 		JMenu toolMenu = new JMenu("도구(T)");
 		menus.add(toolMenu);

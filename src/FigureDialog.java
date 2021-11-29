@@ -33,7 +33,7 @@ public class FigureDialog extends JDialog {
 		JTextField y1Field;
 		JTextField x2Field;
 		JTextField y2Field;
-		String[] figures = { "Box", "Line" };
+		String[] figures = { "Point", "Box", "Line", "Circle" };
 		JComboBox<String> box;
 		
 		JDialog dialog;
@@ -112,12 +112,18 @@ public class FigureDialog extends JDialog {
 				return;
 			}
 			Figure newFigure = null;
-			if (selection.equals("Box")) {
+			if (selection.equals("Point")) {
+				newFigure = new Point(Color.black,x1,y1);
+				newFigure.setPopup(view.pointPopup());
+			} else if (selection.equals("Box")) {
 				newFigure = new Box(Color.black,x1,y1,x2,y2);
 				newFigure.setPopup(view.boxPopup());
 			} else if (selection.equals("Line")) {
 				newFigure = new Line(new Color(0,0,0),x1,y1,x2,y2);
-				newFigure.setPopup(view.linePopup);
+				newFigure.setPopup(view.linePopup());
+			} else if (selection.equals("Circle")) {
+				newFigure = new Circle(new Color(0,0,0),x1,y1,x2,y2);
+				newFigure.setPopup(view.circlePopup());
 			}
 			view.addFigure(newFigure);
 			

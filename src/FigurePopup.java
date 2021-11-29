@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.*;
 
 public class FigurePopup extends Popup {
@@ -20,22 +22,22 @@ public class FigurePopup extends Popup {
 		
 		JMenuItem blackItem = new JMenuItem("Black");
 		blackItem.addActionListener((evt) ->
-			view.setBlackColor());
+			view.setColorForSelectedFigure(Color.black));
 		colorMenu.add(blackItem);
 		
 		JMenuItem redItem = new JMenuItem("Red");
 		redItem.addActionListener((evt) ->
-			view.setRedColor());
+			view.setColorForSelectedFigure(Color.red));
 		colorMenu.add(redItem);
 		
 		JMenuItem greenItem = new JMenuItem("Green");
 		greenItem.addActionListener((evt) ->
-			view.setGreenColor());
+			view.setColorForSelectedFigure(Color.green));
 		colorMenu.add(greenItem);
 
 		JMenuItem blueItem = new JMenuItem("Blue");
 		blueItem.addActionListener((evt) ->
-			view.setBlueColor());
+			view.setColorForSelectedFigure(Color.blue));
 		colorMenu.add(blueItem);
 		
 		JMenuItem chooserItem = new JMenuItem("Choose");
