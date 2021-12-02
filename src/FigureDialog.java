@@ -15,15 +15,20 @@ public class FigureDialog extends JDialog {
 		static int BOTTOM_GAP = TOP_GAP + 10;
 		static int X_LABEL_POS = LEFT_GAP;
 		static int X_FIELD_POS = X_LABEL_POS + LABEL_WIDTH;
-		static int FIELD_WIDTH = 80;
+		static int FIELD_WIDTH = 160;
 		static int CENTER_GAP = 20;
 		static int Y_LABEL_POS = X_FIELD_POS + FIELD_WIDTH + CENTER_GAP;
 		static int Y_FIELD_POS = Y_LABEL_POS + LABEL_WIDTH;
 		static int PANEL_WIDTH = Y_FIELD_POS + FIELD_WIDTH + RIGHT_GAP;
 		static int SECOND_ROW = 2*FIRST_ROW + HEIGHT;
 		static int THIRD_ROW = 3*FIRST_ROW + 2*HEIGHT;
-		static int FINAL_ROW = 4*FIRST_ROW + 3*HEIGHT + HEIGHT/2;
 		static int BOX_WIDTH = 180;
+		
+		static int FOURTH_ROW = 4 * FIRST_ROW + 3 * HEIGHT;
+		static int RADIO_WIDTH = 80;
+		static int RADIO_GAP = (PANEL_WIDTH - 5*RADIO_WIDTH) / 6;
+		
+		static int FINAL_ROW = 5*FIRST_ROW + 4*HEIGHT + HEIGHT/2;
 		static int BUTTON_WIDTH = FIELD_WIDTH;
 		static int OK_POS = (PANEL_WIDTH-2*BUTTON_WIDTH)/3;
 		static int CANCEL_POS = OK_POS + BUTTON_WIDTH + OK_POS;
@@ -33,9 +38,16 @@ public class FigureDialog extends JDialog {
 		JTextField y1Field;
 		JTextField x2Field;
 		JTextField y2Field;
-		String[] figures = { "Point", "Box", "Line", "Circle" };
+		
 		JComboBox<String> box;
 		
+		JRadioButton blackButton;
+		JRadioButton redButton;
+		JRadioButton greenButton;
+		JRadioButton blueButton;
+		JRadioButton chooserButton;
+		
+		Color color;
 		JDialog dialog;
 		DrawerView view;
 		
@@ -84,9 +96,42 @@ public class FigureDialog extends JDialog {
 			y2Field.setHorizontalAlignment(JTextField.RIGHT);
 			add(y2Field);
 		
-			box = new JComboBox<String>(figures);
+			box = new JComboBox<String>(DrawerView.figureType);
 			box.setBounds((PANEL_WIDTH-BOX_WIDTH)/2, THIRD_ROW, BOX_WIDTH, HEIGHT);
 			add(box);
+			
+			ButtonGroup group = new ButtonGroup();
+			
+			blackButton = new JRadioButton("Black",true);
+			blackButton.setBounds(RADIO_GAP,FOURTH_ROW,RADIO_WIDTH,HEIGHT);
+			add(blackButton);
+			group.add(blackButton);
+			blackButton.addActionListener((evt) -> color = Color.black);
+			
+			redButton = new JRadioButton("Red");
+			redButton.setBounds(2*RADIO_GAP+RADIO_WIDTH,FOURTH_ROW,RADIO_WIDTH,HEIGHT);
+			add(redButton);
+			group.add(redButton);
+			redButton.addActionListener((evt) -> color = Color.red);
+			
+			greenButton = new JRadioButton("Green");
+			greenButton.setBounds(3*RADIO_GAP+2*RADIO_WIDTH,FOURTH_ROW,RADIO_WIDTH,HEIGHT);
+			add(greenButton);
+			group.add(greenButton);
+			greenButton.addActionListener((evt) -> color = Color.green);
+			
+			blueButton = new JRadioButton("Blue");
+			blueButton.setBounds(4*RADIO_GAP+3*RADIO_WIDTH,FOURTH_ROW,RADIO_WIDTH,HEIGHT);
+			add(blueButton);
+			group.add(blueButton);
+			blueButton.addActionListener((evt) -> color = Color.blue);
+			
+			chooserButton = new JRadioButton("Chooser");
+			chooserButton.setBounds(5*RADIO_GAP+4*RADIO_WIDTH,FOURTH_ROW,RADIO_WIDTH,HEIGHT);
+			add(chooserButton); 
+			group.add(chooserButton);
+			chooserButton.addActionListener((evt) -> 
+					color = JColorChooser.showDialog(null, "Color Chooser", Color.black));			
 			
 			JButton ok = new JButton("OK");
 			ok.setBounds(OK_POS,FINAL_ROW,BUTTON_WIDTH,HEIGHT);
@@ -113,17 +158,20 @@ public class FigureDialog extends JDialog {
 			}
 			Figure newFigure = null;
 			if (selection.equals("Point")) {
-				newFigure = new Point(Color.black,x1,y1);
+				newFigure = new Point(color,x1,y1);
 				newFigure.setPopup(view.pointPopup());
 			} else if (selection.equals("Box")) {
-				newFigure = new Box(Color.black,x1,y1,x2,y2);
+				newFigure = new Box(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.boxPopup());
 			} else if (selection.equals("Line")) {
-				newFigure = new Line(new Color(0,0,0),x1,y1,x2,y2);
+				newFigure = new Line(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.linePopup());
 			} else if (selection.equals("Circle")) {
-				newFigure = new Circle(new Color(0,0,0),x1,y1,x2,y2);
+				newFigure = new Circle(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.circlePopup());
+			} else if (selection.equals("TV")) {
+				newFigure = new TV(color,x1,y1,true);
+				newFigure.setPopup(view.tvPopup());
 			}
 			view.addFigure(newFigure);
 			
@@ -159,6 +207,7 @@ public class FigureDialog extends JDialog {
 		container.add(panel);
 		
 		setSize(panel.getSize());
+		setResizable(false);
 	}
 	
 }

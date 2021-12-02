@@ -6,10 +6,15 @@ import javax.swing.*;
 public class DrawerFrame extends JFrame {
 	DrawerView canvas;
 	StatusBar statusBar;
+	FigureDialog dialog;
 	
 	public void writePosition(String s) {
 		// delegation
 		statusBar.writePosition(s);
+	}
+	
+	public void writeFigureType(String s) {
+		statusBar.writeFigureType(s); 
 	}
 	
 	DrawerFrame() {
@@ -23,13 +28,75 @@ public class DrawerFrame extends JFrame {
 		Image img = tk.getImage("England.png");
 		setIconImage(img);
 		
-		Container container = this.getContentPane();
-		//container.setBackground(Color.red);
-		
-		canvas = new DrawerView(this);
-		container.add(canvas,"Center");
+		Container container = this.getContentPane();		
 		statusBar = new StatusBar();
 		container.add(statusBar,"South");
+		canvas = new DrawerView(this);
+		JScrollPane sp = new JScrollPane(canvas);
+		container.add(sp,"Center");
+		//sp.getVerticalScrollBar().setBlockIncrement(100);
+		
+		sp.registerKeyboardAction(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						JScrollBar scrollBar = sp.getVerticalScrollBar();
+						scrollBar.setValue(scrollBar.getValue() + scrollBar.getBlockIncrement());
+					}
+				}
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN
+				, 0), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		sp.registerKeyboardAction(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						JScrollBar scrollBar = sp.getVerticalScrollBar();
+						scrollBar.setValue(scrollBar.getValue() - scrollBar.getBlockIncrement());
+					}
+				}
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP
+				, 0), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		sp.registerKeyboardAction(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						JScrollBar scrollBar = sp.getHorizontalScrollBar();
+						scrollBar.setValue(scrollBar.getValue() + scrollBar.getBlockIncrement());
+					}
+				}
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN
+				, InputEvent.CTRL_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		sp.registerKeyboardAction(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						JScrollBar scrollBar = sp.getHorizontalScrollBar();
+						scrollBar.setValue(scrollBar.getValue() - scrollBar.getBlockIncrement());
+					}
+				}
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP
+				, InputEvent.CTRL_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		sp.registerKeyboardAction((evt) -> canvas.increaseHeight()				
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN
+				, InputEvent.ALT_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		sp.registerKeyboardAction((evt) -> canvas.increaseWidth()
+				, KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP
+				, InputEvent.ALT_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW
+		);
+		
+		JToolBar selectToolBar = new JToolBar();
+		selectToolBar.add(canvas.getPointAction());
+		selectToolBar.add(canvas.getBoxAction());
+		selectToolBar.add(canvas.getLineAction());
+		selectToolBar.add(canvas.getCircleAction());
+		selectToolBar.add(canvas.getTVAction());
+		container.add(selectToolBar,BorderLayout.NORTH);
 		
 		addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
@@ -89,31 +156,30 @@ public class DrawerFrame extends JFrame {
 		JMenu figureMenu = new JMenu("그림(F)");
 		menus.add(figureMenu);
 		
-		JMenuItem figurePoint = new JMenuItem("Point (P)");
+		JMenuItem figurePoint = new JMenuItem(canvas.getPointAction());
 		figureMenu.add(figurePoint);
-		figurePoint.addActionListener((evt) -> 
-				canvas.setWhatToDraw(DrawerView.ID_POINT));
 		
 		JMenuItem figureBox = new JMenuItem(canvas.getBoxAction());
 		figureMenu.add(figureBox);
 
-		JMenuItem figureLine = new JMenuItem("Line (L)");
+		JMenuItem figureLine = new JMenuItem(canvas.getLineAction());
 		figureMenu.add(figureLine);
-		figureLine.addActionListener( (e) ->
-				canvas.setWhatToDraw(DrawerView.ID_LINE) );
 
-		JMenuItem figureCircle = new JMenuItem("Circle (C)");
+		JMenuItem figureCircle = new JMenuItem(canvas.getCircleAction());
 		figureMenu.add(figureCircle);
-		figureCircle.addActionListener( (e) ->
-				canvas.setWhatToDraw(DrawerView.ID_CIRCLE) );
 
+		JMenuItem figureTV = new JMenuItem(canvas.getTVAction());
+		figureMenu.add(figureTV);
+		
 		JMenu toolMenu = new JMenu("도구(T)");
 		menus.add(toolMenu);
 		
 		JMenuItem modalTool = new JMenuItem("Modal (M)");
 		toolMenu.add(modalTool);
 		modalTool.addActionListener( (e) -> {
-					FigureDialog dialog = new FigureDialog("Figure Dialog", canvas);
+					if (dialog == null) {
+						dialog = new FigureDialog("Figure Dialog", canvas);
+					}
 					dialog.setModal(true);
 					dialog.setVisible(true);
 				});
@@ -121,7 +187,9 @@ public class DrawerFrame extends JFrame {
 		JMenuItem modalessTool = new JMenuItem("Modaless (S)");
 		toolMenu.add(modalessTool);
 		modalessTool.addActionListener( (e) -> {
-					FigureDialog dialog = new FigureDialog("Figure Dialog", canvas);
+					if (dialog == null) {
+						dialog = new FigureDialog("Figure Dialog", canvas);
+					}
 					dialog.setModal(false);
 					dialog.setVisible(true);
 				});

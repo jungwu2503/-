@@ -7,10 +7,18 @@ import javax.swing.*;
 public class DrawerView extends JPanel
 					implements MouseListener, MouseMotionListener {
 	
+	public static String[] figureType =
+			{ "Point", "Box", "Line", "Circle", "TV" };
+	
+	public static int INIT_WIDTH = 3000;
+	public static int INIT_HEIGHT = 1500;
+	public static int DELTA = 500;
+	
 	public static int ID_POINT = 0;
 	public static int ID_BOX = 1;
 	public static int ID_LINE = 2;
 	public static int ID_CIRCLE = 3;
+	public static int ID_TV = 4;
 	
 	public static int NOTHING = 0;
 	public static int DRAWING = 1;
@@ -29,33 +37,73 @@ public class DrawerView extends JPanel
 	private Popup boxPopup;
 	private Popup linePopup;
 	private Popup circlePopup;
+	private Popup tvPopup;
 	
+	private SelectAction pointAction;
 	private SelectAction boxAction;
+	private SelectAction lineAction;
+	private SelectAction circleAction;
+	private SelectAction tvAction;
 	
-	//StatusBar statusBar;
 	private DrawerFrame mainFrame;
+	
+	private int width = INIT_WIDTH;
+	private int height = INIT_HEIGHT;
 	
 	DrawerView(DrawerFrame mainFrame) {
 		//this.statusBar = statusBar;
 		this.mainFrame = mainFrame;
 		
+		pointAction = new SelectAction("Point(P)",new ImageIcon("point.gif"), this, ID_POINT);
 		boxAction = new SelectAction("Box(B)",new ImageIcon("box.gif"), this, ID_BOX);
+		lineAction = new SelectAction("Line(L)",new ImageIcon("line.gif"), this, ID_LINE);
+		circleAction = new SelectAction("Circle(c)",new ImageIcon("Circle.gif"), this, ID_CIRCLE);
+		tvAction = new SelectAction("TV(t)",new ImageIcon("tv.gif"), this, ID_TV);
 		
 		mainPopup = new MainPopup(this);
 		pointPopup = new FigurePopup(this, "Point", false);
 		boxPopup = new FigurePopup(this, "Box", true);
 		linePopup = new FigurePopup(this, "Line", false);
 		circlePopup = new FigurePopup(this, "Circle", true);
-		
+		tvPopup = new TVPopup(this);
 				
 		actionMode = NOTHING;
-		whatToDraw = ID_BOX;
+		setWhatToDraw(ID_BOX);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		setPreferredSize(new Dimension(width,height));
+	}
+	
+	public void increaseHeight() {
+		height += DELTA;
+		setPreferredSize(new Dimension(width,height));
+	}
+	
+	public void increaseWidth() {
+		width
+		+= DELTA;
+		setPreferredSize(new Dimension(width,height));
+	}
+	
+	SelectAction getPointAction() {
+		return pointAction;
 	}
 	
 	SelectAction getBoxAction() {
 		return boxAction;
+	}	
+	
+	SelectAction getLineAction() {
+		return lineAction;
+	}
+	
+	SelectAction getCircleAction() {
+		return circleAction;
+	}
+	
+	SelectAction getTVAction() {
+		return tvAction;
 	}
 	
 	Popup pointPopup() {
@@ -74,8 +122,13 @@ public class DrawerView extends JPanel
 		return circlePopup;
 	}
 	
-	void setWhatToDraw(int figureType) {
-		whatToDraw = figureType;
+	Popup tvPopup() {
+		return tvPopup;
+	}
+	
+	void setWhatToDraw(int id) {
+		whatToDraw = id;
+		mainFrame.writeFigureType(figureType[id]);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -167,6 +220,11 @@ public class DrawerView extends JPanel
 		} else if (whatToDraw == ID_CIRCLE) {
 			selectedFigure = new Circle(Color.black,x,y);
 			selectedFigure.setPopup(circlePopup);
+		} else if (whatToDraw == ID_TV) {
+			selectedFigure = new TV(Color.black,x,y,true);
+			selectedFigure.setPopup(tvPopup);
+			addFigure(selectedFigure);
+			return;
 		}
 		actionMode = DRAWING;
 	}
@@ -246,6 +304,23 @@ public class DrawerView extends JPanel
 		setColorForSelectedFigure(color);
 	}
 	
+	public void onOffTV() {
+		if (selectedFigure == null) return;
+		if (selectedFigure instanceof TV) {
+			TV tv = (TV)selectedFigure;
+			tv.pressPowerButton();
+			repaint();
+		}		
+	}
+
+	public void setAntenna() {
+		if (selectedFigure == null) return;
+		if (selectedFigure instanceof TV) {
+			TV tv = (TV)selectedFigure;
+			tv.setAntenna();
+			repaint();
+		}
+	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {

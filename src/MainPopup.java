@@ -7,25 +7,20 @@ public class MainPopup extends Popup {
 	MainPopup(DrawerView view) {
 		super("±×¸²");
 		
-		JMenuItem pointItem = new JMenuItem("Point(P)");
+		JMenuItem pointItem = new JMenuItem(view.getPointAction());
 		popupPtr.add(pointItem);
-		pointItem.addActionListener((evt) -> 
-				view.setWhatToDraw(DrawerView.ID_POINT));
 		
 		JMenuItem boxItem = new JMenuItem(view.getBoxAction());
 		popupPtr.add(boxItem);
 		
-		JMenuItem lineItem = new JMenuItem("Line(L)");
+		JMenuItem lineItem = new JMenuItem(view.getLineAction());
 		popupPtr.add(lineItem);
-		lineItem.addActionListener((evt) -> 
-				view.setWhatToDraw(DrawerView.ID_LINE));
 		
-		JMenuItem circleItem = new JMenuItem("Circle(C)");
+		JMenuItem circleItem = new JMenuItem(view.getCircleAction());
 		popupPtr.add(circleItem);
-		circleItem.addActionListener((evt) -> 
-				view.setWhatToDraw(DrawerView.ID_CIRCLE));
-
 		
+		JMenuItem tvItem = new JMenuItem(view.getTVAction());
+		popupPtr.add(tvItem);
 	}
 	
 }
