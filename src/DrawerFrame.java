@@ -96,6 +96,7 @@ public class DrawerFrame extends JFrame {
 		selectToolBar.add(canvas.getLineAction());
 		selectToolBar.add(canvas.getCircleAction());
 		selectToolBar.add(canvas.getTVAction());
+		selectToolBar.add(canvas.getKiteAction());
 		container.add(selectToolBar,BorderLayout.NORTH);
 		
 		addComponentListener(new ComponentAdapter() {
@@ -170,6 +171,9 @@ public class DrawerFrame extends JFrame {
 
 		JMenuItem figureTV = new JMenuItem(canvas.getTVAction());
 		figureMenu.add(figureTV);
+		
+		JMenuItem figureKite = new JMenuItem(canvas.getKiteAction());
+		figureMenu.add(figureKite);
 		
 		JMenu toolMenu = new JMenu("µµ±¸(T)");
 		menus.add(toolMenu);

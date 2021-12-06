@@ -172,6 +172,9 @@ public class FigureDialog extends JDialog {
 			} else if (selection.equals("TV")) {
 				newFigure = new TV(color,x1,y1,true);
 				newFigure.setPopup(view.tvPopup());
+			} else if (selection.equals("Kite")) {
+				newFigure = new Kite(color,x1,y1,x2,y2);
+				newFigure.setPopup(view.kitePopup());
 			}
 			view.addFigure(newFigure);
 			

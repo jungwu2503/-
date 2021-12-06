@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Box extends TwoPointFigure {
 
-	private boolean fillFlag;
+	protected boolean fillFlag;
 	
 	Box(Color color) {	
 		super(color);

@@ -8,7 +8,7 @@ public class DrawerView extends JPanel
 					implements MouseListener, MouseMotionListener {
 	
 	public static String[] figureType =
-			{ "Point", "Box", "Line", "Circle", "TV" };
+			{ "Point", "Box", "Line", "Circle", "TV", "Kite" };
 	
 	public static int INIT_WIDTH = 3000;
 	public static int INIT_HEIGHT = 1500;
@@ -19,6 +19,7 @@ public class DrawerView extends JPanel
 	public static int ID_LINE = 2;
 	public static int ID_CIRCLE = 3;
 	public static int ID_TV = 4;
+	public static int ID_KITE = 5;
 	
 	public static int NOTHING = 0;
 	public static int DRAWING = 1;
@@ -38,12 +39,14 @@ public class DrawerView extends JPanel
 	private Popup linePopup;
 	private Popup circlePopup;
 	private Popup tvPopup;
+	private Popup kitePopup;
 	
 	private SelectAction pointAction;
 	private SelectAction boxAction;
 	private SelectAction lineAction;
 	private SelectAction circleAction;
 	private SelectAction tvAction;
+	private SelectAction kiteAction;
 	
 	private DrawerFrame mainFrame;
 	
@@ -59,6 +62,7 @@ public class DrawerView extends JPanel
 		lineAction = new SelectAction("Line(L)",new ImageIcon("line.gif"), this, ID_LINE);
 		circleAction = new SelectAction("Circle(c)",new ImageIcon("Circle.gif"), this, ID_CIRCLE);
 		tvAction = new SelectAction("TV(t)",new ImageIcon("tv.gif"), this, ID_TV);
+		kiteAction = new SelectAction("KITE(k)",new ImageIcon("kite.gif"), this, ID_KITE);
 		
 		mainPopup = new MainPopup(this);
 		pointPopup = new FigurePopup(this, "Point", false);
@@ -66,6 +70,7 @@ public class DrawerView extends JPanel
 		linePopup = new FigurePopup(this, "Line", false);
 		circlePopup = new FigurePopup(this, "Circle", true);
 		tvPopup = new TVPopup(this);
+		kitePopup = new FigurePopup(this, "Kite", true);
 				
 		actionMode = NOTHING;
 		setWhatToDraw(ID_BOX);
@@ -106,6 +111,10 @@ public class DrawerView extends JPanel
 		return tvAction;
 	}
 	
+	SelectAction getKiteAction() {
+		return kiteAction;
+	}
+	
 	Popup pointPopup() {
 		return pointPopup;
 	}
@@ -124,6 +133,10 @@ public class DrawerView extends JPanel
 	
 	Popup tvPopup() {
 		return tvPopup;
+	}
+
+	Popup kitePopup() {
+		return kitePopup;
 	}
 	
 	void setWhatToDraw(int id) {
@@ -225,6 +238,9 @@ public class DrawerView extends JPanel
 			selectedFigure.setPopup(tvPopup);
 			addFigure(selectedFigure);
 			return;
+		} else if (whatToDraw == ID_KITE) {
+			selectedFigure = new Kite(new Color(0,0,0),x,y);
+			selectedFigure.setPopup(kitePopup);
 		}
 		actionMode = DRAWING;
 	}
