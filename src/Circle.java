@@ -5,7 +5,7 @@ public class Circle extends TwoPointFigure {
 
 	private boolean fillFlag;
 	
-	Circle(Color color) {	
+	Circle(Color color) {
 		super(color);
 		fillFlag = false;
 	}
@@ -20,9 +20,16 @@ public class Circle extends TwoPointFigure {
 		fillFlag = false;
 	}
 	
+	boolean getFillFlag() {
+		return fillFlag;
+	}
+	
+	void setFillFlag(boolean flag) {
+		fillFlag = flag;
+	}
+	
 	void setFill() {
-		fillFlag = !fillFlag;
-		
+		fillFlag = !fillFlag;		
 	}
 	
 	void draw(Graphics g) {
@@ -32,10 +39,10 @@ public class Circle extends TwoPointFigure {
 		int height = Math.abs(y2-y1);
 		
 		g.setColor(color);
-		g.drawOval(minX, minY, width, height);	
+		g.drawOval(minX, minY, width, height);
 		
 		if (fillFlag == true) {
-			g.drawOval(minX, minY, width, height);
+			g.fillOval(minX, minY, width, height);
 		}
 	}	
 	

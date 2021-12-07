@@ -7,6 +7,7 @@ public class DrawerFrame extends JFrame {
 	DrawerView canvas;
 	StatusBar statusBar;
 	FigureDialog dialog;
+	TableDialog tableDialog;
 	
 	public void writePosition(String s) {
 		// delegation
@@ -183,8 +184,8 @@ public class DrawerFrame extends JFrame {
 		modalTool.addActionListener( (e) -> {
 					if (dialog == null) {
 						dialog = new FigureDialog("Figure Dialog", canvas);
+						dialog.setModal(true);
 					}
-					dialog.setModal(true);
 					dialog.setVisible(true);
 				});
 		
@@ -193,9 +194,19 @@ public class DrawerFrame extends JFrame {
 		modalessTool.addActionListener( (e) -> {
 					if (dialog == null) {
 						dialog = new FigureDialog("Figure Dialog", canvas);
-					}
-					dialog.setModal(false);
+						dialog.setModal(false);
+					}					
 					dialog.setVisible(true);
+				});
+		
+		JMenuItem tableTool = new JMenuItem("Table (T)");
+		toolMenu.add(tableTool);
+		tableTool.addActionListener( (e) -> {
+					if (tableDialog == null) {
+						tableDialog = new TableDialog("Table Dialog", canvas);
+						tableDialog.setModal(true);
+					}					
+					tableDialog.setVisible(true);
 				});
 
 		
