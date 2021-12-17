@@ -1,32 +1,46 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 public class TableDialog extends JDialog {
 
 	static class FigureTableModel implements TableModel{
-
+		DrawerView view;
+		ArrayList<Figure> figures;
+		static final String[] columnNames = new String[] {
+				"Figure Type", "x1", "y1", "x2", "y2"
+		};
+		static final Class[] columnTypes = new Class[] {
+				String.class, Integer.class, Integer.class, Integer.class, Integer.class
+		};
+		
+		FigureTableModel(DrawerView view) {
+			this.view = view;
+			figures = view.getFigures();
+		}
+		
 		@Override
 		public int getRowCount() {
-			return 5;
+			return figures.size();
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 3;
+			return columnNames.length;
 		}
 
 		@Override
 		public String getColumnName(int columnIndex) {
-			return "Hello";
+			return columnNames[columnIndex];
 		}
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return String.class;
+			return columnTypes[columnIndex];
 		}
 
 		@Override
@@ -36,7 +50,15 @@ public class TableDialog extends JDialog {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			return "XXX"+rowIndex+","+columnIndex;
+			Figure ptr = figures.get(rowIndex);
+			switch(columnIndex) {
+				case 0: return ptr.getClass().getName();
+				case 1: return ptr.getX1();
+				case 2: return ptr.getY1();
+				case 3: return (ptr.getX2() > 0 ? ptr.getX2() : null);
+				case 4: return (ptr.getY2() > 0 ? ptr.getY2() : null);
+				default: return null;
+			}
 		}
 
 		@Override
@@ -58,8 +80,19 @@ public class TableDialog extends JDialog {
 	
 	static class FigureTable extends JTable {
 		FigureTable(DrawerView view) {
-			super();
-			setModel(new FigureTableModel());
+			super(new FigureTableModel(view));
+			DefaultListSelectionModel selectionModel
+			= new DefaultListSelectionModel();
+			setSelectionModel(selectionModel);
+			
+			TableColumnModel colModel = getColumnModel();
+			TableColumn nameColumn = colModel.getColumn(0);
+			DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+			renderer.setHorizontalAlignment(SwingConstants.CENTER);
+			nameColumn.setCellRenderer(renderer);
+		}
+		public int getSelectedIndex() {
+			return selectionModel.getMinSelectionIndex(); 
 		}
 	}
 	
@@ -68,7 +101,7 @@ public class TableDialog extends JDialog {
 		DrawerView view;
 		JButton done;
 		JButton remove;
-		JTable table;
+		FigureTable table;
 		
 		DialogPanel(JDialog dialog, DrawerView view) {
 			this.view = view;
@@ -85,14 +118,21 @@ public class TableDialog extends JDialog {
 			add(bottom,BorderLayout.SOUTH);
 			
 			done.addActionListener(this);
+			remove.addActionListener(this);
 		}
 		
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == done) {
 				dialog.setVisible(false);
+			} else if (event.getSource() == remove) {
+				view.remove(table.getSelectedIndex());
+				updateUI();
 			}
 		}
 		
+		public void updateUI() {
+			if (table != null) table.updateUI();
+		}
 	}
 	
 	TableDialog(String title, DrawerView view) {
@@ -103,6 +143,13 @@ public class TableDialog extends JDialog {
 		Container container = getContentPane();
 		JPanel panel = new DialogPanel(this,view);
 		container.add(panel);		
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowActivated(WindowEvent e) {
+				panel.updateUI();
+			}
+		});
+		
 	}
 	
 }

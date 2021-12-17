@@ -1,6 +1,8 @@
+import java.io.*;
+
 import javax.swing.*;
 
-public class Popup {
+public class Popup implements Serializable {
 
 	JPopupMenu popupPtr;
 	Popup(String title) {

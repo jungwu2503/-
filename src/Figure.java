@@ -1,13 +1,15 @@
 import java.awt.*;
+import java.io.*;
 
 import javax.swing.*;
 
-abstract public class Figure {
+abstract public class Figure implements Serializable {
 
+	//private static final long serialVersionUID = 511...L;
 	protected static int MOVE_DX = 20;
 	protected static int MOVE_DY = 10;
 	protected Polygon region;
-	protected Popup popup;
+	transient protected Popup popup;
 	protected Color color;
 	Figure(Color color) {
 		this.color = color;
@@ -47,4 +49,30 @@ abstract public class Figure {
 		draw(g);
 	}
 	
+	// hook function
+	int getX1() {
+		return -1;
+	}
+	
+	int getY1() {
+		return -1;
+	}
+	
+	int getX2() {
+		return -1;
+	}
+	
+	int getY2() {
+		return -1;
+	}
+	
+	public String toString() {
+		String s = "" +getClass().getName() + "[" + getX1() + "," + getY1();
+		if (getX2() < 0) {
+			s = s + "]";
+			return s;
+		}
+		s = s + "," + getX2() + "," + getY2() + "]";
+		return s;
+	}
 }

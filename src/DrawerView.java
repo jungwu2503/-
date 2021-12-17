@@ -1,14 +1,151 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
 public class DrawerView extends JPanel
 					implements MouseListener, MouseMotionListener {
 	
+	static class TextEditor extends JTextArea implements DocumentListener, MouseListener {
+		private DrawerView canvas;
+		private int INIT_WIDTH = 100;
+		private int INIT_HEIGHT = 150;
+		private int DELTA = 30;
+		private Font font;
+		private FontMetrics fm;
+		int x;
+		int y;
+		int width;
+		int height;
+		TextEditor(DrawerView canvas) {
+			super();
+			this.canvas = canvas;
+			setBackground(canvas.getBackground());
+			getDocument().addDocumentListener(this);
+		}
+		
+		public void start(int x, int y) {
+			setText("");
+			font = getFont();
+			fm = canvas.getGraphics().getFontMetrics();
+			this.x = x;
+			this.y = y;
+			this.width = INIT_WIDTH;
+			this.height = INIT_HEIGHT;
+			
+			setBounds(x,y,width,height);
+			Graphics g = canvas.getGraphics();
+			g.setColor(Color.blue);
+			g.drawRect(x, y, INIT_WIDTH-2, INIT_HEIGHT);
+			setBorder(BorderFactory.createLineBorder(Color.blue));
+			setCaretPosition(0);
+			canvas.removeMouseListener(canvas);
+			canvas.removeMouseMotionListener(canvas);
+			
+			canvas.add(this);
+			requestFocus();
+			
+			canvas.addMouseListener(this);
+		}
+		
+		public void insertUpdate(DocumentEvent e) {
+			String text = getText();
+			String[] lines = text.split("\n");
+			
+			int w;
+			int maxWidth = 0;
+			for (int i = 0; i < lines.length; i++) {
+				String s = lines[i];
+				w = fm.stringWidth(s);
+				if (w > maxWidth) maxWidth = w;
+			}
+			if (maxWidth > width) {
+				width = width + DELTA;
+				setBounds(x,y,width,height);
+			}
+			int maxHeight = lines.length * fm.getHeight();
+			if (maxHeight > height) {
+				height = height + DELTA;
+				setBounds(x,y,width,height);
+			}			
+		}
+		
+		public void removeUpdate(DocumentEvent e) {
+		}
+		public void changeUpdate(DocumentEvent e) {
+		}
+		
+		public void mouseClicked(MouseEvent e) {
+			canvas.remove(this);
+			canvas.removeMouseListener(this);
+			canvas.addMouseListener(canvas);
+			canvas.addMouseMotionListener(canvas);
+			
+			String text = getText();
+			String[] lines = text.split("\n");
+			int w;
+			
+			if (lines.length == 1 && lines[0].equals("")) return;
+			
+			int maxWidth = 0;
+			for (int i = 0; i < lines.length; i++) {
+				String s = lines[i];
+				w = fm.stringWidth(s);
+				if (w > maxWidth) maxWidth = w;
+			}
+			int maxHeight = lines.length * fm.getHeight();
+			
+			Text newFigure = new Text(Color.black, x, y, x+maxWidth, y+maxHeight, lines);
+			
+			newFigure.setPopup(canvas.textPopup());
+			canvas.addFigure(newFigure);
+			
+			canvas.repaint();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 	public static String[] figureType =
-			{ "Point", "Box", "Line", "Circle", "TV", "Kite" };
+			{ "Point", "Box", "Line", "Circle", "TV", "Kite", "Text" };
+	public static ArrayList<String> figureTypeNames = new ArrayList<String>();
+	static {
+		for (int i = 0; i < figureType.length; i++) {
+			figureTypeNames.add(figureType[i]);
+		}
+	}
 	
 	public static int INIT_WIDTH = 3000;
 	public static int INIT_HEIGHT = 1500;
@@ -20,6 +157,7 @@ public class DrawerView extends JPanel
 	public static int ID_CIRCLE = 3;
 	public static int ID_TV = 4;
 	public static int ID_KITE = 5;
+	public static int ID_TEXT = 6;
 	
 	public static int NOTHING = 0;
 	public static int DRAWING = 1;
@@ -40,6 +178,8 @@ public class DrawerView extends JPanel
 	private Popup circlePopup;
 	private Popup tvPopup;
 	private Popup kitePopup;
+	private Popup textPopup;
+	private Popup[] popups = new Popup[figureType.length];
 	
 	private SelectAction pointAction;
 	private SelectAction boxAction;
@@ -47,22 +187,39 @@ public class DrawerView extends JPanel
 	private SelectAction circleAction;
 	private SelectAction tvAction;
 	private SelectAction kiteAction;
+	private SelectAction textAction;
 	
 	private DrawerFrame mainFrame;
 	
+	private double zoomRatio = 1.0;
 	private int width = INIT_WIDTH;
 	private int height = INIT_HEIGHT;
 	
+	private TextEditor textEditor;
+	
 	DrawerView(DrawerFrame mainFrame) {
 		//this.statusBar = statusBar;
+		setLayout(null);
 		this.mainFrame = mainFrame;
 		
+		textEditor = new TextEditor(this);
+		
+		/*
 		pointAction = new SelectAction("Point(P)",new ImageIcon("point.gif"), this, ID_POINT);
 		boxAction = new SelectAction("Box(B)",new ImageIcon("box.gif"), this, ID_BOX);
 		lineAction = new SelectAction("Line(L)",new ImageIcon("line.gif"), this, ID_LINE);
 		circleAction = new SelectAction("Circle(c)",new ImageIcon("Circle.gif"), this, ID_CIRCLE);
 		tvAction = new SelectAction("TV(t)",new ImageIcon("tv.gif"), this, ID_TV);
 		kiteAction = new SelectAction("KITE(k)",new ImageIcon("kite.gif"), this, ID_KITE);
+		textAction = new SelectAction("TEXT(X)",new ImageIcon("text.gif"), this, ID_TEXT);
+		*/
+		pointAction = new SelectAction("Point(P)",new FigureIcon(figureType[0]), this, ID_POINT);
+		boxAction = new SelectAction("Box(B)",new FigureIcon(figureType[1]), this, ID_BOX);
+		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[2]), this, ID_LINE);
+		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[3]), this, ID_CIRCLE);
+		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[4]), this, ID_TV);
+		kiteAction = new SelectAction("KITE(k)",new FigureIcon(figureType[5]), this, ID_KITE);
+		textAction = new SelectAction("TEXT(X)",new FigureIcon(figureType[6]), this, ID_TEXT);
 		
 		mainPopup = new MainPopup(this);
 		pointPopup = new FigurePopup(this, "Point", false);
@@ -71,13 +228,27 @@ public class DrawerView extends JPanel
 		circlePopup = new FigurePopup(this, "Circle", true);
 		tvPopup = new TVPopup(this);
 		kitePopup = new FigurePopup(this, "Kite", true);
+		textPopup = new FigurePopup(this, "Text", false);
 				
+		int i = 0;
+		popups[i++] = pointPopup;
+		popups[i++] = boxPopup;
+		popups[i++] = linePopup;
+		popups[i++] = circlePopup;
+		popups[i++] = tvPopup;
+		popups[i++] = kitePopup;
+		popups[i++] = textPopup;
+		
 		actionMode = NOTHING;
 		setWhatToDraw(ID_BOX);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		
 		setPreferredSize(new Dimension(width,height));
+	}
+	
+	public ArrayList<Figure> getFigures() {
+		return figures;
 	}
 	
 	public void increaseHeight() {
@@ -139,14 +310,61 @@ public class DrawerView extends JPanel
 		return kitePopup;
 	}
 	
+	Popup textPopup() {
+		return textPopup;
+	}
+	
 	void setWhatToDraw(int id) {
 		whatToDraw = id;
 		mainFrame.writeFigureType(figureType[id]);
 	}
 	
+	public void doFileNew() {
+		figures.clear();
+		repaint();
+	}
+	
+	public void doOpen(String fileName) {
+		try {
+			FileInputStream fis = new FileInputStream(fileName);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			figures = (ArrayList<Figure>)ois.readObject();
+			ois.close();
+			fis.close();
+			
+			for (Figure ptr : figures) {
+				String figureTypeName = ptr.getClass().getName();
+				int index = figureTypeNames.indexOf(figureTypeName);
+				ptr.setPopup(popups[index]);
+			}
+			
+			repaint();
+		} catch (IOException ex) {
+			
+		} catch (ClassNotFoundException ex) {
+			
+		}
+		
+	}
+	
+	public void doSave(String fileName) {
+		try {
+			FileOutputStream fos = new FileOutputStream(fileName);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(figures);
+			oos.flush();
+			oos.close();
+			fos.close();
+		} catch(IOException ex) {
+			
+		}
+		
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		((Graphics2D)g).scale(zoomRatio, zoomRatio);
 		for (int i = 0; i < figures.size(); i++) {
 			Figure pFigure = figures.get(i);
 			pFigure.draw(g);
@@ -154,6 +372,17 @@ public class DrawerView extends JPanel
 		
 	}
 
+	public void zoom(int ratio) {
+		zoomRatio = (double)ratio/100.0;
+		repaint();
+		removeMouseListener(this);
+		removeMouseMotionListener(this);
+		if (ratio == 100) {
+			addMouseListener(this);
+			addMouseMotionListener(this);
+		}
+	}
+	
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		int x = e.getX();
@@ -237,10 +466,17 @@ public class DrawerView extends JPanel
 			selectedFigure = new TV(Color.black,x,y,true);
 			selectedFigure.setPopup(tvPopup);
 			addFigure(selectedFigure);
+			selectedFigure = null;
+			actionMode = NOTHING;
 			return;
 		} else if (whatToDraw == ID_KITE) {
 			selectedFigure = new Kite(new Color(0,0,0),x,y);
 			selectedFigure.setPopup(kitePopup);
+		} else if (whatToDraw == ID_TEXT) {
+			selectedFigure = null;
+			actionMode = NOTHING;
+			textEditor.start(x,y);
+			return;
 		}
 		actionMode = DRAWING;
 	}
@@ -260,6 +496,9 @@ public class DrawerView extends JPanel
 			
 			return;
 		}
+		
+		if (selectedFigure == null) return;
+		
 		Graphics g = getGraphics();
 		if (actionMode == DRAWING) {
 			selectedFigure.setXY2(x, y);
@@ -270,6 +509,19 @@ public class DrawerView extends JPanel
 		selectedFigure = null;
 	}
 
+	public void removeFromFigures(Figure ptr) {
+		selectedFigure = null;
+		figures.remove(ptr);
+		repaint();
+	}
+	
+	public void removeFromFigures(int index) {
+		if (index < 0) return;
+		selectedFigure = null;
+		figures.remove(index);
+		repaint();
+	}
+	
 	public void addFigure(Figure newFigure) {
 		newFigure.makeRegion();
 		figures.add(newFigure);

@@ -1,13 +1,70 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.print.*;
+import java.io.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 public class DrawerFrame extends JFrame {
+	
+	static class ZoomBox extends JComboBox implements ActionListener {
+		DrawerView canvas;
+		static String[] size = { "100", "80", "50" };
+			
+		ZoomBox(DrawerView canvas) {
+			super(size);
+			this.canvas = canvas;
+			setMaximumSize(new Dimension(1500,200));
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			JComboBox box = (JComboBox) e.getSource();
+			String ratio = (String)box.getSelectedItem();
+			canvas.zoom(Integer.parseInt(ratio));
+		}
+		
+	}
+	
+	static class PrintableView implements Printable {
+		DrawerView canvas;
+		String fileName;
+		PrintableView(DrawerView canvas, String fileName) {
+			this.canvas = canvas;
+			this.fileName = fileName;
+		}
+		public int print(Graphics g, PageFormat format, int pagenum) {
+			if (pagenum > 0) return Printable.NO_SUCH_PAGE;
+			
+			Graphics2D g2 = (Graphics2D)g;
+			double pageX = format.getImageableX()+1;
+			double pageY = format.getImageableY()+1;
+			g2.translate(pageX, pageY);
+			
+			int pageWidth = (int)format.getImageableWidth()-2;
+			int pageHeight = (int)format.getImageableHeight()-2;
+			
+			g2.drawRect(-1, -1, pageWidth+2, pageHeight+2);
+			
+			g2.setClip(0,0,pageWidth,pageHeight);
+			g2.scale(0.5, 0.5);
+			
+			canvas.paint(g);
+			
+			g2.scale(2.0, 2.0);
+			g2.drawString(fileName, 0, pageHeight);
+			
+			return Printable.PAGE_EXISTS;
+		}
+	}
+	
 	DrawerView canvas;
 	StatusBar statusBar;
 	FigureDialog dialog;
 	TableDialog tableDialog;
+	TreeDialog treeDialog;
+	String fileName = "noname.jdr";
 	
 	public void writePosition(String s) {
 		// delegation
@@ -18,8 +75,54 @@ public class DrawerFrame extends JFrame {
 		statusBar.writeFigureType(s); 
 	}
 	
+	public void doOpen() {
+		JFileChooser chooser = 
+				new JFileChooser(System.getProperty("user.dir"));
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileFilter(new FileNameExtensionFilter("JDrawer file", "jdr"));
+		int value = chooser.showOpenDialog(null);
+		if (value != JFileChooser.APPROVE_OPTION) return;
+		fileName = chooser.getSelectedFile().getPath();
+		canvas.doOpen(fileName);
+		setTitle("Drawer - [" + fileName + "]");
+	}
+	
+	public void doSaveAs() {
+		JFileChooser chooser = 
+				new JFileChooser(System.getProperty("user.dir"));
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setFileFilter(new FileNameExtensionFilter("JDrawer file", "jdr"));
+		int value = chooser.showSaveDialog(null);
+		if (value != JFileChooser.APPROVE_OPTION) return;
+		fileName = chooser.getSelectedFile().getPath();
+		if (fileName.endsWith(".jdr") == false)
+			fileName = fileName + ".jdr";
+		setTitle("Drawer - [" + fileName + "]");
+		canvas.doSave(fileName);
+	}
+	
+	public void doPrint() {
+		PrinterJob job = PrinterJob.getPrinterJob();
+		
+		PageFormat page = job.defaultPage();
+		page.setOrientation(PageFormat.LANDSCAPE);
+		
+		Printable printable = new PrintableView(canvas,fileName);
+		job.setPrintable(printable,page);	
+		
+		if (job.printDialog()) {
+			try {
+				job.print();
+			} catch (PrinterException ex) {
+				JOptionPane.showMessageDialog(this, ex.toString(), "PrinterException", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
 	DrawerFrame() {
-		setTitle("Drawer");
+		setTitle("Drawer - [noname.jdr]");
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Dimension d = tk.getScreenSize();
 		int screenHeight = d.height;
@@ -98,6 +201,10 @@ public class DrawerFrame extends JFrame {
 		selectToolBar.add(canvas.getCircleAction());
 		selectToolBar.add(canvas.getTVAction());
 		selectToolBar.add(canvas.getKiteAction());
+		selectToolBar.add(canvas.getTextAction());
+		//selectToolBar.add(new JSeparator());
+		selectToolBar.add(new ZoomBox(canvas));
+		selectToolBar.add(javax.swing.Box.createGlue());
 		container.add(selectToolBar,BorderLayout.NORTH);
 		
 		addComponentListener(new ComponentAdapter() {
@@ -114,18 +221,14 @@ public class DrawerFrame extends JFrame {
 		JMenu fileMenu = new JMenu("파일(F)");
 		menus.add(fileMenu);
 		
-		JMenuItem newFile = new JMenuItem("새파일(N)");
+		JMenuItem newFile = new JMenuItem("새 파일(N)");
 		fileMenu.add(newFile);
 		newFile.setMnemonic('N');
 		newFile.setIcon(new ImageIcon("house.png"));
 		newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 								InputEvent.CTRL_DOWN_MASK));
-		newFile.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("새 파일(N)");
-				}				
-			});
+		newFile.addActionListener( (e) -> canvas.doFileNew());
+		
 		JMenuItem openFile = new JMenuItem("열기(O)");
 		fileMenu.add(openFile);
 		openFile.setMnemonic('O');
@@ -133,17 +236,27 @@ public class DrawerFrame extends JFrame {
 								InputEvent.CTRL_DOWN_MASK));
 		openFile.setIcon(new ImageIcon("magnifier.png"));
 		openFile.addActionListener( (e) ->
-			System.out.println("열기(O)")			
+			doOpen()		
 		);
+		
 		JMenuItem saveFile = new JMenuItem("저장(S)");
 		fileMenu.add(saveFile);
 		saveFile.setMnemonic('S');
 		saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 								InputEvent.CTRL_DOWN_MASK));
 		saveFile.setIcon(new ImageIcon("key.png"));
+		saveFile.addActionListener((e) -> canvas.doSave(fileName));
+		
 		JMenuItem anotherFile = new JMenuItem("다른 이름으로 저장(A)");
 		fileMenu.add(anotherFile);
+		anotherFile.addActionListener((e) -> doSaveAs());
 		
+		fileMenu.addSeparator();
+		
+		JMenuItem printFile = new JMenuItem("프린트(p)");
+		fileMenu.add(printFile);
+		printFile.addActionListener((e) -> doPrint());
+
 		fileMenu.addSeparator();
 		
 		JMenuItem exit = new JMenuItem("종료(X)");
@@ -175,6 +288,9 @@ public class DrawerFrame extends JFrame {
 		
 		JMenuItem figureKite = new JMenuItem(canvas.getKiteAction());
 		figureMenu.add(figureKite);
+		
+		JMenuItem figureText = new JMenuItem(canvas.getTextAction());
+		figureMenu.add(figureText);
 		
 		JMenu toolMenu = new JMenu("도구(T)");
 		menus.add(toolMenu);
@@ -209,6 +325,31 @@ public class DrawerFrame extends JFrame {
 					tableDialog.setVisible(true);
 				});
 
+		JMenuItem treeTool = new JMenuItem("Tree (R)");
+		toolMenu.add(treeTool);
+		treeTool.addActionListener( (e) -> {
+					if (treeDialog == null) {
+						treeDialog = new TreeDialog("Tree Dialog", canvas);
+						treeDialog.setModal(true);
+					}					
+					treeDialog.setVisible(true);
+				});
+		
+		JMenu zoomMenu = new JMenu("zoom");
+		toolMenu.add(zoomMenu);
+		
+		JMenuItem zoom100 = new JMenuItem("100%");
+		zoomMenu.add(zoom100);
+		zoom100.addActionListener((e) -> canvas.zoom(100));
+		
+		JMenuItem zoom80 = new JMenuItem("80%");
+		zoomMenu.add(zoom80);
+		zoom80.addActionListener((e) -> canvas.zoom(80));
+		
+		JMenuItem zoom50 = new JMenuItem("50%");
+		zoomMenu.add(zoom50);
+		zoom50.addActionListener((e) -> canvas.zoom(50));
+		
 		
 		JMenu helpMenu = new JMenu("도움말(H)");
 		menus.add(helpMenu);
