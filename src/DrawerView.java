@@ -139,7 +139,7 @@ public class DrawerView extends JPanel
 	}
 	
 	public static String[] figureType =
-			{ "Point", "Box", "Line", "Circle", "TV", "Kite", "Text" };
+			{ "Point", "Star", "Box", "Line", "Circle", "TV", "Kite", "Text" };
 	public static ArrayList<String> figureTypeNames = new ArrayList<String>();
 	static {
 		for (int i = 0; i < figureType.length; i++) {
@@ -152,12 +152,13 @@ public class DrawerView extends JPanel
 	public static int DELTA = 500;
 	
 	public static int ID_POINT = 0;
-	public static int ID_BOX = 1;
-	public static int ID_LINE = 2;
-	public static int ID_CIRCLE = 3;
-	public static int ID_TV = 4;
-	public static int ID_KITE = 5;
-	public static int ID_TEXT = 6;
+	public static int ID_STAR = 1;
+	public static int ID_BOX = 2;
+	public static int ID_LINE = 3;
+	public static int ID_CIRCLE = 4;
+	public static int ID_TV = 5;
+	public static int ID_KITE = 6;
+	public static int ID_TEXT = 7;
 	
 	public static int NOTHING = 0;
 	public static int DRAWING = 1;
@@ -173,6 +174,7 @@ public class DrawerView extends JPanel
 	
 	private Popup mainPopup;
 	private Popup pointPopup;
+	private Popup starPopup;
 	private Popup boxPopup;
 	private Popup linePopup;
 	private Popup circlePopup;
@@ -182,6 +184,7 @@ public class DrawerView extends JPanel
 	private Popup[] popups = new Popup[figureType.length];
 	
 	private SelectAction pointAction;
+	private SelectAction starAction;
 	private SelectAction boxAction;
 	private SelectAction lineAction;
 	private SelectAction circleAction;
@@ -214,15 +217,17 @@ public class DrawerView extends JPanel
 		textAction = new SelectAction("TEXT(X)",new ImageIcon("text.gif"), this, ID_TEXT);
 		*/
 		pointAction = new SelectAction("Point(P)",new FigureIcon(figureType[0]), this, ID_POINT);
-		boxAction = new SelectAction("Box(B)",new FigureIcon(figureType[1]), this, ID_BOX);
-		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[2]), this, ID_LINE);
-		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[3]), this, ID_CIRCLE);
-		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[4]), this, ID_TV);
-		kiteAction = new SelectAction("KITE(k)",new FigureIcon(figureType[5]), this, ID_KITE);
-		textAction = new SelectAction("TEXT(X)",new FigureIcon(figureType[6]), this, ID_TEXT);
+		starAction = new SelectAction("Star(S)",new FigureIcon(figureType[1]), this, ID_STAR);		
+		boxAction = new SelectAction("Box(B)",new FigureIcon(figureType[2]), this, ID_BOX);
+		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[3]), this, ID_LINE);
+		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[4]), this, ID_CIRCLE);
+		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[5]), this, ID_TV);
+		kiteAction = new SelectAction("KITE(k)",new FigureIcon(figureType[6]), this, ID_KITE);
+		textAction = new SelectAction("TEXT(X)",new FigureIcon(figureType[7]), this, ID_TEXT);
 		
 		mainPopup = new MainPopup(this);
 		pointPopup = new FigurePopup(this, "Point", false);
+		starPopup = new FigurePopup(this, "Star", true);
 		boxPopup = new FigurePopup(this, "Box", true);
 		linePopup = new FigurePopup(this, "Line", false);
 		circlePopup = new FigurePopup(this, "Circle", true);
@@ -232,6 +237,7 @@ public class DrawerView extends JPanel
 				
 		int i = 0;
 		popups[i++] = pointPopup;
+		popups[i++] = starPopup;
 		popups[i++] = boxPopup;
 		popups[i++] = linePopup;
 		popups[i++] = circlePopup;
@@ -266,6 +272,10 @@ public class DrawerView extends JPanel
 		return pointAction;
 	}
 	
+	SelectAction getStarAction() {
+		return starAction;
+	}
+	
 	SelectAction getBoxAction() {
 		return boxAction;
 	}	
@@ -286,8 +296,16 @@ public class DrawerView extends JPanel
 		return kiteAction;
 	}
 	
+	SelectAction getTextAction() {
+		return textAction;
+	}
+	
 	Popup pointPopup() {
 		return pointPopup;
+	}
+	
+	Popup starPopup() {
+		return starPopup;
 	}
 	
 	Popup boxPopup() {
@@ -453,6 +471,9 @@ public class DrawerView extends JPanel
 		if (whatToDraw == ID_POINT) {
 			selectedFigure = new Point(new Color(0,0,0),x,y);
 			selectedFigure.setPopup(pointPopup);
+		} else if (whatToDraw == ID_STAR) { 
+			selectedFigure = new Star(new Color(0,0,0),x,y);
+			selectedFigure.setPopup(starPopup);
 		} else if (whatToDraw == ID_BOX) {
 			selectedFigure = new Box(new Color(0,0,0),x,y);
 			selectedFigure.setPopup(boxPopup);

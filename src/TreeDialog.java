@@ -253,7 +253,7 @@ public class TreeDialog extends JDialog {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
 				Object selectedObject = selectedNode.getUserObject();
 				if (selectedObject instanceof Figure) {
-					view.remove((Figure)selectedObject);
+					view.removeFromFigures((Figure)selectedObject);
 					updateUI();
 				}
 				

@@ -10,6 +10,9 @@ public class MainPopup extends Popup {
 		JMenuItem pointItem = new JMenuItem(view.getPointAction());
 		popupPtr.add(pointItem);
 		
+		JMenuItem starItem = new JMenuItem(view.getStarAction());
+		popupPtr.add(starItem);
+		
 		JMenuItem boxItem = new JMenuItem(view.getBoxAction());
 		popupPtr.add(boxItem);
 		
@@ -24,6 +27,9 @@ public class MainPopup extends Popup {
 		
 		JMenuItem kiteItem = new JMenuItem(view.getKiteAction());
 		popupPtr.add(kiteItem);
+
+		JMenuItem textItem = new JMenuItem(view.getTextAction());
+		popupPtr.add(textItem);
 	}
 	
 }

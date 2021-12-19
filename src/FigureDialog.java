@@ -160,6 +160,9 @@ public class FigureDialog extends JDialog {
 			if (selection.equals("Point")) {
 				newFigure = new Point(color,x1,y1);
 				newFigure.setPopup(view.pointPopup());
+			} else if (selection.equals("Star")) {
+				newFigure = new Star(color,x1,y1);
+				newFigure.setPopup(view.starPopup());
 			} else if (selection.equals("Box")) {
 				newFigure = new Box(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.boxPopup());
