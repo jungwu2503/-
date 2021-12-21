@@ -38,8 +38,8 @@ class Star extends OnePointFigure {
 	void draw(Graphics g) {
 
 		g.setColor(color);
-		g.drawOval(x1 - 3, y1 - 3, 5, 5);
-		g.fillOval(x1 - 3, y1 - 3, 6, 6);
+		g.drawOval(x1 - 3, y1 - 3, 2, 2);
+		g.fillOval(x1 - 3, y1 - 3, 3, 3);
 		
 		drawStar(g, x1, y1, 50);
 

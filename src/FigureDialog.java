@@ -166,12 +166,18 @@ public class FigureDialog extends JDialog {
 			} else if (selection.equals("Box")) {
 				newFigure = new Box(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.boxPopup());
+			} else if (selection.equals("Isosceles")) {
+				newFigure = new Isosceles(color,x1,y1,x2,y2);
+				newFigure.setPopup(view.isoscelesPopup());
 			} else if (selection.equals("Line")) {
 				newFigure = new Line(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.linePopup());
 			} else if (selection.equals("Circle")) {
 				newFigure = new Circle(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.circlePopup());
+			} else if (selection.equals("Saturn")) {
+				newFigure = new Saturn(color,x1,y1);
+				newFigure.setPopup(view.saturnPopup());
 			} else if (selection.equals("TV")) {
 				newFigure = new TV(color,x1,y1,true);
 				newFigure.setPopup(view.tvPopup());
@@ -206,7 +212,6 @@ public class FigureDialog extends JDialog {
 	FigureDialog(String title, DrawerView view) {
 		super((JFrame)null,title);
 		setLocation(200,300);
-		
 		
 		Container container = getContentPane();
 		JPanel panel = new DialogPanel(this,view);

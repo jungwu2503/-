@@ -16,11 +16,17 @@ public class MainPopup extends Popup {
 		JMenuItem boxItem = new JMenuItem(view.getBoxAction());
 		popupPtr.add(boxItem);
 		
+		JMenuItem isoscelesItem = new JMenuItem(view.getIsoscelesAction());
+		popupPtr.add(isoscelesItem);
+		
 		JMenuItem lineItem = new JMenuItem(view.getLineAction());
 		popupPtr.add(lineItem);
 		
 		JMenuItem circleItem = new JMenuItem(view.getCircleAction());
 		popupPtr.add(circleItem);
+
+		JMenuItem saturnItem = new JMenuItem(view.getSaturnAction());
+		popupPtr.add(saturnItem);
 		
 		JMenuItem tvItem = new JMenuItem(view.getTVAction());
 		popupPtr.add(tvItem);

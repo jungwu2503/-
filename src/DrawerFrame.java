@@ -198,8 +198,10 @@ public class DrawerFrame extends JFrame {
 		selectToolBar.add(canvas.getPointAction());
 		selectToolBar.add(canvas.getStarAction());
 		selectToolBar.add(canvas.getBoxAction());
+		selectToolBar.add(canvas.getIsoscelesAction());
 		selectToolBar.add(canvas.getLineAction());
 		selectToolBar.add(canvas.getCircleAction());
+		selectToolBar.add(canvas.getSaturnAction());
 		selectToolBar.add(canvas.getTVAction());
 		selectToolBar.add(canvas.getKiteAction());
 		selectToolBar.add(canvas.getTextAction());
@@ -225,7 +227,7 @@ public class DrawerFrame extends JFrame {
 		JMenuItem newFile = new JMenuItem("새 파일(N)");
 		fileMenu.add(newFile);
 		newFile.setMnemonic('N');
-		newFile.setIcon(new ImageIcon("house.png"));
+		newFile.setIcon(new ImageIcon("new.gif"));
 		newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 								InputEvent.CTRL_DOWN_MASK));
 		newFile.addActionListener( (e) -> canvas.doFileNew());
@@ -235,7 +237,7 @@ public class DrawerFrame extends JFrame {
 		openFile.setMnemonic('O');
 		openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 								InputEvent.CTRL_DOWN_MASK));
-		openFile.setIcon(new ImageIcon("magnifier.png"));
+		openFile.setIcon(new ImageIcon("open.gif"));
 		openFile.addActionListener( (e) ->
 			doOpen()		
 		);
@@ -245,7 +247,7 @@ public class DrawerFrame extends JFrame {
 		saveFile.setMnemonic('S');
 		saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 								InputEvent.CTRL_DOWN_MASK));
-		saveFile.setIcon(new ImageIcon("key.png"));
+		saveFile.setIcon(new ImageIcon("save.gif"));
 		saveFile.addActionListener((e) -> canvas.doSave(fileName));
 		
 		JMenuItem anotherFile = new JMenuItem("다른 이름으로 저장(A)");
@@ -280,6 +282,9 @@ public class DrawerFrame extends JFrame {
 		
 		JMenuItem figureBox = new JMenuItem(canvas.getBoxAction());
 		figureMenu.add(figureBox);
+
+		JMenuItem figureIsosceles = new JMenuItem(canvas.getIsoscelesAction());
+		figureMenu.add(figureIsosceles);
 
 		JMenuItem figureLine = new JMenuItem(canvas.getLineAction());
 		figureMenu.add(figureLine);

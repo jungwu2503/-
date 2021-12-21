@@ -139,7 +139,7 @@ public class DrawerView extends JPanel
 	}
 	
 	public static String[] figureType =
-			{ "Point", "Star", "Box", "Line", "Circle", "TV", "Kite", "Text" };
+			{ "Point", "Star", "Box", "Isosceles", "Line", "Circle", "Saturn", "TV", "Kite", "Text" };
 	public static ArrayList<String> figureTypeNames = new ArrayList<String>();
 	static {
 		for (int i = 0; i < figureType.length; i++) {
@@ -154,11 +154,13 @@ public class DrawerView extends JPanel
 	public static int ID_POINT = 0;
 	public static int ID_STAR = 1;
 	public static int ID_BOX = 2;
-	public static int ID_LINE = 3;
-	public static int ID_CIRCLE = 4;
-	public static int ID_TV = 5;
-	public static int ID_KITE = 6;
-	public static int ID_TEXT = 7;
+	public static int ID_ISOSCELES = 3;
+	public static int ID_LINE = 4;
+	public static int ID_CIRCLE = 5;
+	public static int ID_SATURN = 6;
+	public static int ID_TV = 7;
+	public static int ID_KITE = 8; 
+	public static int ID_TEXT = 9;
 	
 	public static int NOTHING = 0;
 	public static int DRAWING = 1;
@@ -176,8 +178,10 @@ public class DrawerView extends JPanel
 	private Popup pointPopup;
 	private Popup starPopup;
 	private Popup boxPopup;
+	private Popup isoscelesPopup;
 	private Popup linePopup;
 	private Popup circlePopup;
+	private Popup saturnPopup;
 	private Popup tvPopup;
 	private Popup kitePopup;
 	private Popup textPopup;
@@ -186,8 +190,10 @@ public class DrawerView extends JPanel
 	private SelectAction pointAction;
 	private SelectAction starAction;
 	private SelectAction boxAction;
+	private SelectAction isoscelesAction;
 	private SelectAction lineAction;
 	private SelectAction circleAction;
+	private SelectAction saturnAction;
 	private SelectAction tvAction;
 	private SelectAction kiteAction;
 	private SelectAction textAction;
@@ -219,18 +225,22 @@ public class DrawerView extends JPanel
 		pointAction = new SelectAction("Point(P)",new FigureIcon(figureType[0]), this, ID_POINT);
 		starAction = new SelectAction("Star(S)",new FigureIcon(figureType[1]), this, ID_STAR);		
 		boxAction = new SelectAction("Box(B)",new FigureIcon(figureType[2]), this, ID_BOX);
-		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[3]), this, ID_LINE);
-		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[4]), this, ID_CIRCLE);
-		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[5]), this, ID_TV);
-		kiteAction = new SelectAction("KITE(k)",new FigureIcon(figureType[6]), this, ID_KITE);
-		textAction = new SelectAction("TEXT(X)",new FigureIcon(figureType[7]), this, ID_TEXT);
+		isoscelesAction = new SelectAction("Isosceles(I)",new FigureIcon(figureType[3]), this, ID_ISOSCELES);
+		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[4]), this, ID_LINE);
+		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[5]), this, ID_CIRCLE);
+		saturnAction = new SelectAction("Saturn(n)",new FigureIcon(figureType[6]), this, ID_SATURN);
+		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[7]), this, ID_TV);
+		kiteAction = new SelectAction("KITE(k)",new FigureIcon(figureType[8]), this, ID_KITE);
+		textAction = new SelectAction("TEXT(X)",new FigureIcon(figureType[9]), this, ID_TEXT);
 		
 		mainPopup = new MainPopup(this);
 		pointPopup = new FigurePopup(this, "Point", false);
-		starPopup = new FigurePopup(this, "Star", true);
+		starPopup = new FigurePopup(this, "Star", false);
 		boxPopup = new FigurePopup(this, "Box", true);
+		isoscelesPopup = new IsoscelesPopup(this);
 		linePopup = new FigurePopup(this, "Line", false);
 		circlePopup = new FigurePopup(this, "Circle", true);
+		saturnPopup = new FigurePopup(this, "Saturn", true);
 		tvPopup = new TVPopup(this);
 		kitePopup = new FigurePopup(this, "Kite", true);
 		textPopup = new FigurePopup(this, "Text", false);
@@ -239,8 +249,10 @@ public class DrawerView extends JPanel
 		popups[i++] = pointPopup;
 		popups[i++] = starPopup;
 		popups[i++] = boxPopup;
+		popups[i++] = isoscelesPopup;
 		popups[i++] = linePopup;
 		popups[i++] = circlePopup;
+		popups[i++] = saturnPopup;
 		popups[i++] = tvPopup;
 		popups[i++] = kitePopup;
 		popups[i++] = textPopup;
@@ -279,6 +291,10 @@ public class DrawerView extends JPanel
 	SelectAction getBoxAction() {
 		return boxAction;
 	}	
+
+	SelectAction getIsoscelesAction() {
+		return isoscelesAction;
+	}	
 	
 	SelectAction getLineAction() {
 		return lineAction;
@@ -286,6 +302,10 @@ public class DrawerView extends JPanel
 	
 	SelectAction getCircleAction() {
 		return circleAction;
+	}
+
+	SelectAction getSaturnAction() {
+		return saturnAction;
 	}
 	
 	SelectAction getTVAction() {
@@ -311,6 +331,10 @@ public class DrawerView extends JPanel
 	Popup boxPopup() {
 		return boxPopup;
 	}
+
+	Popup isoscelesPopup() {
+		return isoscelesPopup;
+	}
 	
 	Popup linePopup() {
 		return linePopup;
@@ -318,6 +342,10 @@ public class DrawerView extends JPanel
 	
 	Popup circlePopup() {
 		return circlePopup;
+	}
+
+	Popup saturnPopup() {
+		return saturnPopup;
 	}
 	
 	Popup tvPopup() {
@@ -477,12 +505,18 @@ public class DrawerView extends JPanel
 		} else if (whatToDraw == ID_BOX) {
 			selectedFigure = new Box(new Color(0,0,0),x,y);
 			selectedFigure.setPopup(boxPopup);
+		} else if (whatToDraw == ID_ISOSCELES) {
+			selectedFigure = new Isosceles(new Color(0,0,0),x,y);
+			selectedFigure.setPopup(isoscelesPopup);
 		} else if (whatToDraw == ID_LINE) {
 			selectedFigure = new Line(Color.black,x,y);
 			selectedFigure.setPopup(linePopup);
 		} else if (whatToDraw == ID_CIRCLE) {
 			selectedFigure = new Circle(Color.black,x,y);
 			selectedFigure.setPopup(circlePopup);
+		} else if (whatToDraw == ID_SATURN) {
+			selectedFigure = new Saturn(Color.black,x,y);
+			selectedFigure.setPopup(saturnPopup);
 		} else if (whatToDraw == ID_TV) {
 			selectedFigure = new TV(Color.black,x,y,true);
 			selectedFigure.setPopup(tvPopup);
@@ -607,6 +641,15 @@ public class DrawerView extends JPanel
 		if (selectedFigure instanceof TV) {
 			TV tv = (TV)selectedFigure;
 			tv.setAntenna();
+			repaint();
+		}
+	}
+	
+	public void orientation(String cardinal) {
+		if (selectedFigure == null) return;
+		if (selectedFigure instanceof Isosceles) {
+			Isosceles isosceles = (Isosceles)selectedFigure;
+			isosceles.orientation(cardinal);
 			repaint();
 		}
 	}
