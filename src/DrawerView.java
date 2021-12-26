@@ -200,6 +200,8 @@ public class DrawerView extends JPanel
 	
 	private DrawerFrame mainFrame;
 	
+	private boolean rulerOn = false;
+	
 	private double zoomRatio = 1.0;
 	private int width = INIT_WIDTH;
 	private int height = INIT_HEIGHT;
@@ -275,8 +277,7 @@ public class DrawerView extends JPanel
 	}
 	
 	public void increaseWidth() {
-		width
-		+= DELTA;
+		width += DELTA;
 		setPreferredSize(new Dimension(width,height));
 	}
 	
@@ -416,6 +417,27 @@ public class DrawerView extends JPanel
 			pFigure.draw(g);
 		}		
 		
+		if (rulerOn) {
+			for (int i = 1; i < 1000; i++) {
+				g.drawLine(i*10, 0, i*10, 10);
+				g.drawLine(0, i*10, 10, i*10);
+				g.drawLine(i*100, 0, i*100, 20);
+				g.drawLine(0, i*100, 20, i*100);
+				g.drawString(""+i, i*100, 30);
+				g.drawString(""+i, 25, i*100+10);
+			}
+		}
+		
+	}
+	
+	public void rulerOn() {
+		rulerOn = true;
+		repaint();
+	}
+	
+	public void rulerOff() {
+		rulerOn = false;
+		repaint();
 	}
 
 	public void zoom(int ratio) {

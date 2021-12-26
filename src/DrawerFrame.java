@@ -347,6 +347,21 @@ public class DrawerFrame extends JFrame {
 		JMenu zoomMenu = new JMenu("zoom");
 		toolMenu.add(zoomMenu);
 		
+		JMenu rulerMenu = new JMenu("Ruler(R)");
+		menus.add(rulerMenu);
+		
+		JMenuItem rulerOn = new JMenuItem("Ruler-On");
+		rulerMenu.add(rulerOn);
+		rulerOn.addActionListener( (e) -> {
+					canvas.rulerOn();
+				});
+		
+		JMenuItem rulerOff = new JMenuItem("Ruler-Off");
+		rulerMenu.add(rulerOff);
+		rulerOff.addActionListener( (e) -> {
+					canvas.rulerOff();
+				});
+		
 		JMenuItem zoom100 = new JMenuItem("100%");
 		zoomMenu.add(zoom100);
 		zoom100.addActionListener((e) -> canvas.zoom(100));

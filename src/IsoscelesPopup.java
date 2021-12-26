@@ -1,4 +1,4 @@
-import java.awt.Color;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -6,6 +6,11 @@ class IsoscelesPopup extends FigurePopup {
 	
 	IsoscelesPopup(DrawerView view) {
 		super(view,"Isosceles",false);		
+		
+		JMenuItem fillItem = new JMenuItem("Fill");
+		fillItem.addActionListener((evt) ->
+			view.fillFigure());
+		popupPtr.add(fillItem);
 		
 		JMenu orientation = new JMenu("orientation");
 		//orientation.addActionListener((evt) -> 

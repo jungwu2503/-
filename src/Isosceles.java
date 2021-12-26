@@ -3,10 +3,10 @@ import java.awt.*;
 public class Isosceles extends Box {
 
 	protected boolean fillFlag;
-	protected boolean EAST = false;
-	protected boolean WEST = false;
-	protected boolean SOUTH = false;
-	protected boolean NORTH = false;
+	protected boolean EAST;
+	protected boolean WEST;
+	protected boolean SOUTH;
+	protected boolean NORTH;
 	
 	Isosceles(Color color) {
 		super(color);
@@ -33,49 +33,64 @@ public class Isosceles extends Box {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
-		g.setColor(color);
-		//g.drawLine(minX+width/2, minY, minX, minY+height);
-		//g.drawLine(minX+width/2, minY, minX+width, minY+height);
-		//g.drawLine(minX, minY+height, minX+width, minY+height);
-		int[] xPoints = { minX+width/2, minX, minX+width };
-		int[] yPoints = { minY, minY+height, minY+height };
+		g.setColor(color);		
+		//int[] xPoints = { minX+width/2, minX, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width };
+		//int[] yPoints = { minY, minY+height, minY+height, minY+height/2*3, minY+height/2*3, minY+height, minY+height };
+		int[] xPoints = { minX+width/2, minX+width/4, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width/4*3 };
+		int[] yPoints = { minY, minY+height/2, minY+height/2, minY+height, minY+height, minY+height/2, minY+height/2 };
 		
-		//g.drawPolygon(xPoints, yPoints, yPoints.length); -----default
-		
-		
-		
-		//Graphics2D g2d = (Graphics2D)g;
 		if (EAST) {
 			xPoints[0] = minX;
 			xPoints[1] = minX;
-			xPoints[2] = minX+width;
-			yPoints[0] = minY;
-			yPoints[1] = minY+height;
-			yPoints[2] = minY+height/2;
-			g.drawPolygon(xPoints, yPoints, yPoints.length);
+			xPoints[2] = minX-width/2;
+			xPoints[3] = minX-width/2;
+			xPoints[4] = minX;
+			xPoints[5] = minX;
+			xPoints[6] = minX+width/2;
+			yPoints[0] = minY+height/6;
+			yPoints[1] = minY+height/3;
+			yPoints[2] = minY+height/3;
+			yPoints[3] = minY+height/3*2;
+			yPoints[4] = minY+height/3*2;
+			yPoints[5] = minY+height/6*5;
+			yPoints[6] = minY+height/2;
 		} else if (WEST) {
-			xPoints[0] = minX;
+			xPoints[0] = minX+width/2;
 			xPoints[1] = minX+width;
 			xPoints[2] = minX+width;
+			xPoints[3] = minX+width/2*3;
+			xPoints[4] = minX+width/2*3;
+			xPoints[5] = minX+width;
+			xPoints[6] = minX+width;			
 			yPoints[0] = minY+height/2;
-			yPoints[1] = minY;
-			yPoints[2] = minY+height;
-			g.drawPolygon(xPoints, yPoints, yPoints.length);
+			yPoints[1] = minY+height/6;
+			yPoints[2] = minY+height/3;
+			yPoints[3] = minY+height/3;
+			yPoints[4] = minY+height/3*2;
+			yPoints[5] = minY+height/3*2;
+			yPoints[6] = minY+height/6*5;
 		} else if (SOUTH) {
-			xPoints[0] = minX;
-			xPoints[1] = minX+width;
-			xPoints[2] = minX+width/2;
+			xPoints[0] = minX+width/6;
+			xPoints[1] = minX+width/3;
+			xPoints[2] = minX+width/3;
+			xPoints[3] = minX+width/3*2;
+			xPoints[4] = minX+width/3*2;
+			xPoints[5] = minX+width/6*5;
+			xPoints[6] = minX+width/2;
+			
 			yPoints[0] = minY;
 			yPoints[1] = minY;
-			yPoints[2] = minY+height;
-			g.drawPolygon(xPoints, yPoints, yPoints.length);
-		} else if (NORTH) {
-			g.drawPolygon(xPoints, yPoints, yPoints.length);
-		} else {
-			g.drawPolygon(xPoints, yPoints, yPoints.length);
+			yPoints[2] = minY-height/2;
+			yPoints[3] = minY-height/2;
+			yPoints[4] = minY;
+			yPoints[5] = minY;
+			yPoints[6] = minY+height/2;
 		}
 		
+		g.drawPolygon(xPoints,
+				yPoints, yPoints.length);
 		
+		makeRegion();
 		if (fillFlag == true) {
 			g.fillPolygon(xPoints, yPoints, yPoints.length);
 		}
@@ -95,10 +110,83 @@ public class Isosceles extends Box {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
-		int[] xPoints = { minX+width/2, minX, minX+width };
+		int[] xPoints = { minX+width/2, minX, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width };
+		int[] yPoints = { minY, minY+height, minY+height, minY+height/2*3, minY+height/2*3, minY+height, minY+height };
+		
+		if (EAST) {
+			xPoints[0] = minX;
+			xPoints[1] = minX;
+			xPoints[2] = minX-width/2;
+			xPoints[3] = minX-width/2;
+			xPoints[4] = minX;
+			xPoints[5] = minX;
+			xPoints[6] = minX+width;
+			yPoints[0] = minY;
+			yPoints[1] = minY+height/3;
+			yPoints[2] = minY+height/3;
+			yPoints[3] = minY+height/3*2;
+			yPoints[4] = minY+height/3*2;
+			yPoints[5] = minY+height;
+			yPoints[6] = minY+height/2;
+		} else if (WEST) {
+			xPoints[0] = minX;
+			xPoints[1] = minX+width;
+			xPoints[2] = minX+width;
+			xPoints[3] = minX+width/2*3;
+			xPoints[4] = minX+width/2*3;
+			xPoints[5] = minX+width;
+			xPoints[6] = minX+width;			
+			yPoints[0] = minY+height/2;
+			yPoints[1] = minY;
+			yPoints[2] = minY+height/3;
+			yPoints[3] = minY+height/3;
+			yPoints[4] = minY+height/3*2;
+			yPoints[5] = minY+height/3*2;
+			yPoints[6] = minY+height;
+		} else if (SOUTH) {
+			xPoints[0] = minX;
+			xPoints[1] = minX+width/3;
+			xPoints[2] = minX+width/3;
+			xPoints[3] = minX+width/3*2;
+			xPoints[4] = minX+width/3*2;
+			xPoints[5] = minX+width;
+			xPoints[6] = minX+width/2;
+			
+			yPoints[0] = minY;
+			yPoints[1] = minY;
+			yPoints[2] = minY-height/2;
+			yPoints[3] = minY-height/2;
+			yPoints[4] = minY;
+			yPoints[5] = minY;
+			yPoints[6] = minY+height;
+		}
+		/*int[] xPoints = { minX+width/2, minX, minX+width };
 		int[] yPoints = { minY, minY+height, minY+height };
 		
-		region = new Polygon(xPoints, yPoints, 3);
+		if (EAST) {
+			xPoints[0] = minX;
+			xPoints[1] = minX;
+			xPoints[2] = minX+width;
+			yPoints[0] = minY;
+			yPoints[1] = minY+height;
+			yPoints[2] = minY+height/2;
+		} else if (WEST) {
+			xPoints[0] = minX;
+			xPoints[1] = minX+width;
+			xPoints[2] = minX+width;
+			yPoints[0] = minY+height/2;
+			yPoints[1] = minY;
+			yPoints[2] = minY+height;
+		} else if (SOUTH) {
+			xPoints[0] = minX;
+			xPoints[1] = minX+width;
+			xPoints[2] = minX+width/2;
+			yPoints[0] = minY;
+			yPoints[1] = minY;
+			yPoints[2] = minY+height;
+		}*/
+		
+		region = new Polygon(xPoints, yPoints, yPoints.length);
 	}
 	
 	Figure orientation(String cardinal) {
