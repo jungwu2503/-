@@ -5,6 +5,7 @@ import java.io.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.*;
+import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
 public class DrawerFrame extends JFrame {
 	
@@ -350,17 +351,24 @@ public class DrawerFrame extends JFrame {
 		JMenu rulerMenu = new JMenu("Ruler(R)");
 		menus.add(rulerMenu);
 		
-		JMenuItem rulerOn = new JMenuItem("Ruler-On");
+		/*JMenuItem rulerOn = new JMenuItem("Ruler-On");
 		rulerMenu.add(rulerOn);
 		rulerOn.addActionListener( (e) -> {
 					canvas.rulerOn();
+				});*/
+		JCheckBoxMenuItem rulerOn = new JCheckBoxMenuItem("Ruler-On");
+		rulerMenu.add(rulerOn);
+		rulerOn.addActionListener( (e) -> {
+					if(rulerOn.getState())
+						canvas.rulerOn();
+					else canvas.rulerOff();
 				});
 		
-		JMenuItem rulerOff = new JMenuItem("Ruler-Off");
+		/*JMenuItem rulerOff = new JMenuItem("Ruler-Off");
 		rulerMenu.add(rulerOff);
 		rulerOff.addActionListener( (e) -> {
 					canvas.rulerOff();
-				});
+				});*/
 		
 		JMenuItem zoom100 = new JMenuItem("100%");
 		zoomMenu.add(zoom100);

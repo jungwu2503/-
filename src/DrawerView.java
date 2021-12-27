@@ -431,7 +431,7 @@ public class DrawerView extends JPanel
 	}
 	
 	public void rulerOn() {
-		rulerOn = true;
+		rulerOn = true;		
 		repaint();
 	}
 	
