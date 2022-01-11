@@ -201,6 +201,7 @@ public class DrawerFrame extends JFrame {
 		selectToolBar.add(canvas.getBoxAction());
 		selectToolBar.add(canvas.getIsoscelesAction());
 		selectToolBar.add(canvas.getLineAction());
+		selectToolBar.add(canvas.getRTriangleAction());
 		selectToolBar.add(canvas.getCircleAction());
 		selectToolBar.add(canvas.getSaturnAction());
 		selectToolBar.add(canvas.getTVAction());
@@ -289,6 +290,9 @@ public class DrawerFrame extends JFrame {
 
 		JMenuItem figureLine = new JMenuItem(canvas.getLineAction());
 		figureMenu.add(figureLine);
+		
+		JMenuItem figureRTriangle = new JMenuItem(canvas.getRTriangleAction());
+		figureMenu.add(figureRTriangle);
 
 		JMenuItem figureCircle = new JMenuItem(canvas.getCircleAction());
 		figureMenu.add(figureCircle);

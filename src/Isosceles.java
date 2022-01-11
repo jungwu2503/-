@@ -28,15 +28,15 @@ public class Isosceles extends Box {
 	}
 	
 	void draw(Graphics g) {
-		int minX = Math.min(x1, x2);
-		int minY = Math.min(y1, y2);
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
+		int minX = Math.min(x1, x2);
+		int minY = Math.min(y1, y2);
 		
-		g.setColor(color);		
+		g.setColor(color);
 		//int[] xPoints = { minX+width/2, minX, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width };
 		//int[] yPoints = { minY, minY+height, minY+height, minY+height/2*3, minY+height/2*3, minY+height, minY+height };
-		int[] xPoints = { minX+width/2, minX+width/4, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width/4*3 };
+		int[] xPoints = { minX+width/5*3, minX+width/5, minX+width/5*2, minX+width/5*2, minX+width/5*4, minX+width/5*4, minX+width };
 		int[] yPoints = { minY, minY+height/2, minY+height/2, minY+height, minY+height, minY+height/2, minY+height/2 };
 		
 		if (EAST) {
@@ -110,8 +110,8 @@ public class Isosceles extends Box {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
-		int[] xPoints = { minX+width/2, minX, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width };
-		int[] yPoints = { minY, minY+height, minY+height, minY+height/2*3, minY+height/2*3, minY+height, minY+height };
+		int[] xPoints = { minX+width/5*3, minX+width/5, minX+width/5*2, minX+width/5*2, minX+width/5*4, minX+width/5*4, minX+width };
+		int[] yPoints = { minY, minY+height/2, minY+height/2, minY+height, minY+height, minY+height/2, minY+height/2 };
 		
 		if (EAST) {
 			xPoints[0] = minX;
