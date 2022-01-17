@@ -22,7 +22,7 @@ public class MainPopup extends Popup {
 		JMenuItem lineItem = new JMenuItem(view.getLineAction());
 		popupPtr.add(lineItem);
 
-		JMenuItem rTriangleItem = new JMenuItem(view.getRTriangleAction());
+		JMenuItem rTriangleItem = new JMenuItem(view.getRegularTriangleAction());
 		popupPtr.add(rTriangleItem);
 		
 		JMenuItem circleItem = new JMenuItem(view.getCircleAction());

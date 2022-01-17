@@ -139,7 +139,7 @@ public class DrawerView extends JPanel
 	}
 	
 	public static String[] figureType =
-			{ "Point", "Star", "Box", "Isosceles", "Line", "RTriangle", "Circle", "Saturn", "TV", "Kite", "Text" };
+			{ "Point", "Star", "Box", "Isosceles", "Line", "RegularTriangle", "Circle", "Saturn", "TV", "Kite", "Text" };
 	public static ArrayList<String> figureTypeNames = new ArrayList<String>();
 	static {
 		for (int i = 0; i < figureType.length; i++) {
@@ -232,7 +232,7 @@ public class DrawerView extends JPanel
 		boxAction = new SelectAction("Box(B)",new FigureIcon(figureType[2]), this, ID_BOX);
 		isoscelesAction = new SelectAction("Isosceles(I)",new FigureIcon(figureType[3]), this, ID_ISOSCELES);
 		lineAction = new SelectAction("Line(L)",new FigureIcon(figureType[4]), this, ID_LINE);
-		rTriangleAction = new SelectAction("RTriangle(R)",new FigureIcon(figureType[5]), this, ID_RTRIANGLE);
+		rTriangleAction = new SelectAction("RegularTriangle(R)",new FigureIcon(figureType[5]), this, ID_RTRIANGLE);
 		circleAction = new SelectAction("Circle(c)",new FigureIcon(figureType[6]), this, ID_CIRCLE);
 		saturnAction = new SelectAction("Saturn(n)",new FigureIcon(figureType[7]), this, ID_SATURN);
 		tvAction = new SelectAction("TV(t)",new FigureIcon(figureType[8]), this, ID_TV);
@@ -244,8 +244,8 @@ public class DrawerView extends JPanel
 		starPopup = new FigurePopup(this, "Star", false);
 		boxPopup = new FigurePopup(this, "Box", true);
 		isoscelesPopup = new IsoscelesPopup(this);
-		linePopup = new FigurePopup(this, "Line", false);
-		rTrianglePopup = new FigurePopup(this, "RTriangle", true);
+		linePopup = new LinePopup(this);
+		rTrianglePopup = new FigurePopup(this, "RegularTriangle", true);
 		circlePopup = new FigurePopup(this, "Circle", true);
 		saturnPopup = new FigurePopup(this, "Saturn", true);
 		tvPopup = new TVPopup(this);
@@ -307,7 +307,7 @@ public class DrawerView extends JPanel
 		return lineAction;
 	}
 
-	SelectAction getRTriangleAction() {
+	SelectAction getRegularTriangleAction() {
 		return rTriangleAction;
 	}
 	
@@ -548,7 +548,7 @@ public class DrawerView extends JPanel
 			selectedFigure = new Line(Color.black,x,y);
 			selectedFigure.setPopup(linePopup);
 		} else if (whatToDraw == ID_RTRIANGLE) {
-			selectedFigure = new RTriangle(Color.black,x,y);
+			selectedFigure = new RegularTriangle(Color.black,x,y);
 			selectedFigure.setPopup(rTrianglePopup);
 		} else if (whatToDraw == ID_CIRCLE) {
 			selectedFigure = new Circle(Color.black,x,y);
@@ -664,6 +664,13 @@ public class DrawerView extends JPanel
 		Color color = JColorChooser.showDialog(null,
 									"Color Chooser", Color.black);
 		setColorForSelectedFigure(color);
+	}
+	
+	public void setArrow() {
+		if (selectedFigure == null) return;
+		Line line = (Line)selectedFigure;
+		line.setArrow();
+		repaint();
 	}
 	
 	public void onOffTV() {

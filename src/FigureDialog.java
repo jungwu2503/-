@@ -172,8 +172,8 @@ public class FigureDialog extends JDialog {
 			} else if (selection.equals("Line")) {
 				newFigure = new Line(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.linePopup());
-			} else if (selection.equals("RTriangle")) {
-				newFigure = new RTriangle(color,x1,y1,x2,y2);
+			} else if (selection.equals("RegularTriangle")) {
+				newFigure = new RegularTriangle(color,x1,y1,x2,y2);
 				newFigure.setPopup(view.rTrianglePopup());
 			} else if (selection.equals("Circle")) {
 				newFigure = new Circle(color,x1,y1,x2,y2);
