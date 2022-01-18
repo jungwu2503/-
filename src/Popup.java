@@ -14,4 +14,8 @@ public class Popup implements Serializable {
 	public void popup(JPanel view, int x, int y) {
 		popupPtr.show(view , x, y);
 	}
+	
+	public void hide() {
+		popupPtr.setVisible(false);
+	}
 }

@@ -11,6 +11,8 @@ abstract public class Figure implements Serializable {
 	protected Polygon region;
 	transient protected Popup popup;
 	protected Color color;
+	// thickness <--
+	
 	Figure(Color color) {
 		this.color = color;
 		region = null;

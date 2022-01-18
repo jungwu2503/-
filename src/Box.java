@@ -31,6 +31,7 @@ public class Box extends TwoPointFigure {
 		int height = Math.abs(y2-y1);
 		
 		g.setColor(color);
+		((Graphics2D)g).setStroke(new BasicStroke(4.0f));
 		g.drawRect(minX, minY, width, height);	
 		
 		if (fillFlag == true) {

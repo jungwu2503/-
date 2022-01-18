@@ -1,17 +1,24 @@
 import javax.swing.*;
 
 class LinePopup extends FigurePopup {
+	JCheckBox arrowBox;
 	
 	LinePopup(DrawerView view) {
 		super(view,"Line",false);		
 		
-		JCheckBox arrowBox = new JCheckBox("Arrow?");
-		JMenuItem arrowItem = new JMenuItem("ARROW");
-		arrowItem.add(arrowBox);
+		arrowBox = new JCheckBox("Arrow");
 		arrowBox.addActionListener((evt) -> 
 			view.setArrow());
-		popupPtr.add(arrowItem);
+		popupPtr.add(arrowBox);
 		
+	}
+	
+	public void setEnableArrowItem(boolean flag) {
+		arrowBox.setEnabled(flag);
+	}
+	
+	public void setArrowItem(boolean flag) {
+		arrowBox.setSelected(flag);
 	}
 	
 }
