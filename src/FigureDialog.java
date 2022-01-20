@@ -48,6 +48,7 @@ public class FigureDialog extends JDialog {
 		JRadioButton chooserButton;
 		
 		Color color;
+		int thickness;
 		JDialog dialog;
 		DrawerView view;
 		
@@ -158,34 +159,34 @@ public class FigureDialog extends JDialog {
 			}
 			Figure newFigure = null;
 			if (selection.equals("Point")) {
-				newFigure = new Point(color,x1,y1);
+				newFigure = new Point(color,thickness,x1,y1);
 				newFigure.setPopup(view.pointPopup());
 			} else if (selection.equals("Star")) {
-				newFigure = new Star(color,x1,y1);
+				newFigure = new Star(color,thickness,x1,y1);
 				newFigure.setPopup(view.starPopup());
 			} else if (selection.equals("Box")) {
-				newFigure = new Box(color,x1,y1,x2,y2);
+				newFigure = new Box(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.boxPopup());
 			} else if (selection.equals("Isosceles")) {
-				newFigure = new Isosceles(color,x1,y1,x2,y2);
+				newFigure = new Isosceles(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.isoscelesPopup());
 			} else if (selection.equals("Line")) {
-				newFigure = new Line(color,x1,y1,x2,y2);
+				newFigure = new Line(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.linePopup());
 			} else if (selection.equals("RegularTriangle")) {
-				newFigure = new RegularTriangle(color,x1,y1,x2,y2);
+				newFigure = new RegularTriangle(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.rTrianglePopup());
 			} else if (selection.equals("Circle")) {
-				newFigure = new Circle(color,x1,y1,x2,y2);
+				newFigure = new Circle(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.circlePopup());
 			} else if (selection.equals("Saturn")) {
-				newFigure = new Saturn(color,x1,y1);
+				newFigure = new Saturn(color,thickness,x1,y1);
 				newFigure.setPopup(view.saturnPopup());
 			} else if (selection.equals("TV")) {
-				newFigure = new TV(color,x1,y1,true);
+				newFigure = new TV(color,thickness,x1,y1,true);
 				newFigure.setPopup(view.tvPopup());
 			} else if (selection.equals("Kite")) {
-				newFigure = new Kite(color,x1,y1,x2,y2);
+				newFigure = new Kite(color,thickness,x1,y1,x2,y2);
 				newFigure.setPopup(view.kitePopup());
 			}
 			view.addFigure(newFigure);

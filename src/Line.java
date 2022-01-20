@@ -11,20 +11,20 @@ public class Line extends TwoPointFigure {
 	static int TAILEND = 1;
 	static int HEADEND = 2;
 	
-	Line(Color color) {
-		super(color);
+	Line(Color color, int thickness) {
+		super(color, thickness);
 		hasTailFlag = false;
 		hasHeadFlag = false;
 	}
 	
-	Line(Color color, int x, int y) {		 
-		super(color,x,y);
+	Line(Color color, int thickness, int x, int y) {		 
+		super(color,thickness,x,y);
 		hasTailFlag = false;
 		hasHeadFlag = false;
 	}
 	
-	Line(Color color, int x1, int y1, int x2, int y2) {	
-		super(color,x1,y1,x2,y2);
+	Line(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+		super(color,thickness,x1,y1,x2,y2);
 		hasTailFlag = false;
 		hasHeadFlag = false;
 	}
@@ -64,7 +64,7 @@ public class Line extends TwoPointFigure {
 	void draw(Graphics g) {		
 		
 		g.setColor(color);
-		((Graphics2D)g).setStroke(new BasicStroke(4.0f));
+		//((Graphics2D)g).setStroke(new BasicStroke(4.0f));
 		g.drawLine(x1, y1, x2, y2); 
 		
 		if (hasTailFlag && !hasHeadFlag) {
@@ -142,7 +142,7 @@ public class Line extends TwoPointFigure {
 	}
 	
 	Figure copy() {
-		Line newLine = new Line(color,x1,y1,x2,y2);
+		Line newLine = new Line(color,thickness,x1,y1,x2,y2);
 		newLine.hasTailFlag = hasTailFlag;
 		newLine.hasHeadFlag = hasHeadFlag;
 		newLine.whichEnd = whichEnd;

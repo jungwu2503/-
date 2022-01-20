@@ -25,36 +25,36 @@ class TV extends TwoPointFigure
     private static int TOTAL_WIDTH = FRAME_WIDTH;
     private static int TOTAL_HEIGHT = FRAME_HEIGHT+ANTENNA_HEIGHT;
     
-    TV(Color color,int x,int y,boolean antennaOption) {
-      super(Color.black,x,y,x+TOTAL_WIDTH,y+TOTAL_HEIGHT);
+    TV(Color color, int thickness, int x,int y,boolean antennaOption) {
+      super(Color.black,thickness,x,y,x+TOTAL_WIDTH,y+TOTAL_HEIGHT);
 
       int x1,y1,x2,y2;
       x1 = x;               
       y1 = y + ANTENNA_HEIGHT;
       x2 = x + FRAME_WIDTH;
       y2 = y + TOTAL_HEIGHT;
-      frame = new Box(Color.black,x1,y1,x2,y2);
+      frame = new Box(Color.black,thickness,x1,y1,x2,y2);
       x1 = x1 + FRAME_GAP;
       y1 = y1 + FRAME_GAP;
       x2 = x1 + SCREEN_WIDTH;
       y2 = y1 + SCREEN_HEIGHT;
-      screen = new Box(color,x1,y1,x2,y2);
+      screen = new Box(color,thickness,x1,y1,x2,y2);
       x1 = x2 + FRAME_GAP;
       y1 = y1 + FRAME_GAP/2;
       x2 = x1 + SWITCH_SIZE;
       y2 = y1 + SWITCH_SIZE;
-      channelButton = new Circle(Color.black,x1,y1,x2,y2);
+      channelButton = new Circle(Color.black,thickness,x1,y1,x2,y2);
       y1 = y1 + SWITCH_GAP;
       y2 = y1 + SWITCH_SIZE;
-      volumnButton = new Circle(Color.black,x1,y1,x2,y2);
+      volumnButton = new Circle(Color.black,thickness,x1,y1,x2,y2);
       y1 = y1 + SWITCH_GAP;
       y2 = y1 + SWITCH_SIZE;
-      menuButton = new Circle(Color.black,x1,y1,x2,y2);
+      menuButton = new Circle(Color.black,thickness,x1,y1,x2,y2);
       x1 = x1 - FRAME_GAP/3 + 2;
       y1 = y1 + SWITCH_GAP + 2;
       x2 = x1 + POWER_SWITCH_WIDTH;
       y2 = y1 + POWER_SWITCH_HEIGHT;
-      powerButton = new Box(Color.black,x1,y1,x2,y2);
+      powerButton = new Box(Color.black,thickness,x1,y1,x2,y2);
       antennaFlag = antennaOption;
       if (antennaOption == true) {
          int cx = x + TOTAL_WIDTH/2;
@@ -62,9 +62,9 @@ class TV extends TwoPointFigure
          y1 = y;
          x2 = cx;
          y2 = y + ANTENNA_HEIGHT;
-         antenna1 = new Line(Color.black,x1,y1,x2,y2);
+         antenna1 = new Line(Color.black,thickness,x1,y1,x2,y2);
          x1 = cx + ANTENNA_WIDTH;
-         antenna2 = new Line(Color.black,x1,y1,x2,y2);
+         antenna2 = new Line(Color.black,thickness,x1,y1,x2,y2);
       } else {
          antenna1 = null;
          antenna2 = null;
@@ -81,9 +81,9 @@ class TV extends TwoPointFigure
          int y1 = this.y1;
          int x2 = cx;
          int y2 = this.y1 + ANTENNA_HEIGHT;
-         antenna1 = new Line(Color.black,x1,y1,x2,y2);
+         antenna1 = new Line(Color.black,thickness,x1,y1,x2,y2);
          x1 = cx + ANTENNA_WIDTH;
-         antenna2 = new Line(Color.black,x1,y1,x2,y2);
+         antenna2 = new Line(Color.black,thickness,x1,y1,x2,y2);
       }
       antennaFlag = !antennaFlag;
     } 
@@ -129,7 +129,7 @@ class TV extends TwoPointFigure
       }
     }
     Figure copy() {
-      TV newTV = new TV(color,x1,y1,antennaFlag);
+      TV newTV = new TV(color,thickness,x1,y1,antennaFlag);
       newTV.popup = popup;
       newTV.setColor(color);
       newTV.move(MOVE_DX, MOVE_DY);

@@ -11,10 +11,11 @@ abstract public class Figure implements Serializable {
 	protected Polygon region;
 	transient protected Popup popup;
 	protected Color color;
-	// thickness <--
+	protected int thickness;
 	
-	Figure(Color color) {
+	Figure(Color color, int thickness) {
 		this.color = color;
+		this.thickness = thickness;
 		region = null;
 		popup = null;
 	}
@@ -23,6 +24,9 @@ abstract public class Figure implements Serializable {
 	}
 	void setColor(Color color) {
 		this.color = color;
+	}
+	void setThickness(int thickness) {
+		this.thickness = thickness;
 	}
 	void setPopup(Popup popup) {
 		this.popup = popup;

@@ -4,14 +4,14 @@ public class Text extends Box {
 
 	String[] lines;
 	
-	Text(Color color) {
-		super(color);
+	Text(Color color, int thickness) {
+		super(color,thickness);
 	}
-	Text(Color color, int x, int y) {
-		super(color,x,y);
+	Text(Color color, int thickness, int x, int y) {
+		super(color,thickness,x,y);
 	}
-	Text(Color color, int x1, int y1, int x2, int y2, String lines[]) {
-		super(color,x1,y1,x2,y2);
+	Text(Color color, int thickness, int x1, int y1, int x2, int y2, String lines[]) {
+		super(color,thickness,x1,y1,x2,y2);
 		this.lines = lines;
 	}
 	void setColor(Color color) {
@@ -31,7 +31,7 @@ public class Text extends Box {
 	}	
 	
 	Figure copy() {
-		Text newText = new Text(color,x1,y1,x2,y2,lines);
+		Text newText = new Text(color,thickness,x1,y1,x2,y2,lines);
 		newText.popup = popup;
 		newText.move(MOVE_DX, MOVE_DY);
 		return newText;

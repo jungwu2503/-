@@ -3,12 +3,12 @@ import java.awt.Graphics;
 
 public class Point extends OnePointFigure {
 
-	Point(Color color) {	
-		super(color);
+	Point(Color color, int thickness) {	
+		super(color, thickness);
 	}
 	
-	Point(Color color, int x, int y) {	
-		super(color,x,y);
+	Point(Color color, int thickness, int x, int y) {	
+		super(color,thickness,x,y);
 	}
 	
 	void draw(Graphics g) {		
@@ -18,7 +18,7 @@ public class Point extends OnePointFigure {
 	}	
 	
 	Figure copy() {
-		Point newPoint = new Point(color,x1,y1);
+		Point newPoint = new Point(color,thickness,x1,y1);
 		newPoint.popup = popup;
 		newPoint.move(MOVE_DX, MOVE_DY);
 		return newPoint;

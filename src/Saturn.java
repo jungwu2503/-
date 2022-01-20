@@ -4,13 +4,13 @@ public class Saturn extends OnePointFigure {
 
 	private boolean fillFlag;
 	
-	Saturn(Color color) {
-		super(color);
+	Saturn(Color color, int thickness) {
+		super(color, thickness);
 		fillFlag = false;
 	}
 	
-	Saturn(Color color, int x, int y) {	
-		super(color,x,y);
+	Saturn(Color color, int thickness, int x, int y) {	
+		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
@@ -51,7 +51,7 @@ public class Saturn extends OnePointFigure {
 	}	
 	
 	Figure copy() {
-		Saturn newSaturn = new Saturn(color,x1,y1);
+		Saturn newSaturn = new Saturn(color,thickness,x1,y1);
 		newSaturn.popup = popup;
 		newSaturn.fillFlag = fillFlag;
 		newSaturn.move(MOVE_DX, MOVE_DY);

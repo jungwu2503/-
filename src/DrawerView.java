@@ -6,6 +6,8 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+//import DrawerFrame.ThicknessBox;
+
 public class DrawerView extends JPanel
 					implements MouseListener, MouseMotionListener {
 	
@@ -20,6 +22,7 @@ public class DrawerView extends JPanel
 		int y;
 		int width;
 		int height;
+		
 		TextEditor(DrawerView canvas) {
 			super();
 			this.canvas = canvas;
@@ -98,7 +101,9 @@ public class DrawerView extends JPanel
 			}
 			int maxHeight = lines.length * fm.getHeight();
 			
-			Text newFigure = new Text(Color.black, x, y, x+maxWidth, y+maxHeight, lines);
+			int thickness = canvas.setThickness();
+			
+			Text newFigure = new Text(Color.black, thickness, x, y, x+maxWidth, y+maxHeight, lines);
 			
 			newFigure.setPopup(canvas.textPopup());
 			canvas.addFigure(newFigure);
@@ -206,6 +211,7 @@ public class DrawerView extends JPanel
 	private boolean rulerOn = false;
 	
 	private double zoomRatio = 1.0;
+	private double thickness = 1.0;
 	private int width = INIT_WIDTH;
 	private int height = INIT_HEIGHT;
 	
@@ -426,6 +432,8 @@ public class DrawerView extends JPanel
 		super.paintComponent(g);
 		
 		((Graphics2D)g).scale(zoomRatio, zoomRatio);
+		((Graphics2D)g).setStroke(new BasicStroke((float) thickness));
+		
 		for (int i = 0; i < figures.size(); i++) {
 			Figure pFigure = figures.get(i);
 			pFigure.draw(g);
@@ -463,6 +471,17 @@ public class DrawerView extends JPanel
 			addMouseListener(this);
 			addMouseMotionListener(this);
 		}
+	}
+	
+	public void setThickness(int ratio) {
+		thickness = (double)ratio;
+		repaint();
+		/*removeMouseListener(this);
+		removeMouseMotionListener(this);
+		if (ratio == 100) {
+			addMouseListener(this);
+			addMouseMotionListener(this);
+		}*/
 	}
 	
 	@Override
@@ -532,39 +551,41 @@ public class DrawerView extends JPanel
 			return;
 		}
 		
+		int thickness = this.setThickness();
+		
 		if (whatToDraw == ID_POINT) {
-			selectedFigure = new Point(new Color(0,0,0),x,y);
+			selectedFigure = new Point(new Color(0,0,0),thickness,x,y);
 			selectedFigure.setPopup(pointPopup);
 		} else if (whatToDraw == ID_STAR) { 
-			selectedFigure = new Star(new Color(0,0,0),x,y);
+			selectedFigure = new Star(new Color(0,0,0),thickness,x,y);
 			selectedFigure.setPopup(starPopup);
 		} else if (whatToDraw == ID_BOX) {
-			selectedFigure = new Box(new Color(0,0,0),x,y);
+			selectedFigure = new Box(new Color(0,0,0),thickness,x,y);
 			selectedFigure.setPopup(boxPopup);
 		} else if (whatToDraw == ID_ISOSCELES) {
-			selectedFigure = new Isosceles(new Color(0,0,0),x,y);
+			selectedFigure = new Isosceles(new Color(0,0,0),thickness,x,y);
 			selectedFigure.setPopup(isoscelesPopup);
 		} else if (whatToDraw == ID_LINE) {
-			selectedFigure = new Line(Color.black,x,y);
+			selectedFigure = new Line(Color.black,thickness,x,y);
 			selectedFigure.setPopup(linePopup);
 		} else if (whatToDraw == ID_RTRIANGLE) {
-			selectedFigure = new RegularTriangle(Color.black,x,y);
+			selectedFigure = new RegularTriangle(Color.black,thickness,x,y);
 			selectedFigure.setPopup(rTrianglePopup);
 		} else if (whatToDraw == ID_CIRCLE) {
-			selectedFigure = new Circle(Color.black,x,y);
+			selectedFigure = new Circle(Color.black,thickness,x,y);
 			selectedFigure.setPopup(circlePopup);
 		} else if (whatToDraw == ID_SATURN) {
-			selectedFigure = new Saturn(Color.black,x,y);
+			selectedFigure = new Saturn(Color.black,thickness,x,y);
 			selectedFigure.setPopup(saturnPopup);
 		} else if (whatToDraw == ID_TV) {
-			selectedFigure = new TV(Color.black,x,y,true);
+			selectedFigure = new TV(Color.black,thickness,x,y,true);
 			selectedFigure.setPopup(tvPopup);
 			addFigure(selectedFigure);
 			selectedFigure = null;
 			actionMode = NOTHING;
 			return;
 		} else if (whatToDraw == ID_KITE) {
-			selectedFigure = new Kite(new Color(0,0,0),x,y);
+			selectedFigure = new Kite(new Color(0,0,0),thickness,x,y);
 			selectedFigure.setPopup(kitePopup);
 		} else if (whatToDraw == ID_TEXT) {
 			selectedFigure = null;
@@ -658,6 +679,10 @@ public class DrawerView extends JPanel
 		if (selectedFigure == null) return;
 		selectedFigure.setColor(color);
 		repaint();
+	}
+	
+	public int setThickness() {
+		return 1; 
 	}
 	
 	public void showColorChooser() {

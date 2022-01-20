@@ -5,18 +5,18 @@ public class Circle extends TwoPointFigure {
 
 	private boolean fillFlag;
 	
-	Circle(Color color) {
-		super(color);
+	Circle(Color color, int thickness) {
+		super(color, thickness);
 		fillFlag = false;
 	}
 	
-	Circle(Color color, int x, int y) {	
-		super(color,x,y);
+	Circle(Color color, int thickness, int x, int y) {	
+		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	Circle(Color color, int x1, int y1, int x2, int y2) {	
-		super(color,x1,y1,x2,y2);
+	Circle(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
 	
@@ -47,7 +47,7 @@ public class Circle extends TwoPointFigure {
 	}	
 	
 	Figure copy() {
-		Circle newCircle = new Circle(color,x1,y1,x2,y2);
+		Circle newCircle = new Circle(color,thickness,x1,y1,x2,y2);
 		newCircle.popup = popup;
 		newCircle.fillFlag = fillFlag;
 		newCircle.move(MOVE_DX, MOVE_DY);

@@ -28,6 +28,25 @@ public class DrawerFrame extends JFrame {
 		
 	}
 	
+	static class ThicknessBox extends JComboBox implements ActionListener {
+		DrawerView canvas;
+		static String[] thick = { "1", "5", "10" };
+		
+		ThicknessBox(DrawerView canvas) {
+			super(thick);
+			this.canvas = canvas;
+			setMaximumSize(new Dimension(1700, 200));
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			JComboBox box = (JComboBox) e.getSource();
+			String ratio = (String)box.getSelectedItem();
+			canvas.setThickness(Integer.parseInt(ratio));
+		}		
+		
+	}
+	
 	static class PrintableView implements Printable {
 		DrawerView canvas;
 		String fileName;
@@ -209,6 +228,7 @@ public class DrawerFrame extends JFrame {
 		selectToolBar.add(canvas.getTextAction());
 		//selectToolBar.add(new JSeparator());
 		selectToolBar.add(new ZoomBox(canvas));
+		selectToolBar.add(new ThicknessBox(canvas));
 		selectToolBar.add(javax.swing.Box.createGlue());
 		container.add(selectToolBar,BorderLayout.NORTH);
 		

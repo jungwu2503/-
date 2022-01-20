@@ -4,18 +4,18 @@ public class RegularTriangle extends TwoPointFigure {
 	
 	protected boolean fillFlag;
 	
-	RegularTriangle(Color color) {
-		super(color);
+	RegularTriangle(Color color, int thickness) {
+		super(color, thickness);
 		fillFlag = false;
 	}
 	
-	RegularTriangle(Color color, int x, int y) {		 
-		super(color,x,y);
+	RegularTriangle(Color color, int thickness, int x, int y) {		 
+		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	RegularTriangle(Color color, int x1, int y1, int x2, int y2) {	
-		super(color,x1,y1,x2,y2);
+	RegularTriangle(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
 	
@@ -83,7 +83,7 @@ public class RegularTriangle extends TwoPointFigure {
 	}
 	
 	Figure copy() {
-		RegularTriangle newRegularTriangle = new RegularTriangle(color,x1,y1,x2,y2);
+		RegularTriangle newRegularTriangle = new RegularTriangle(color,thickness,x1,y1,x2,y2);
 		newRegularTriangle.popup = popup;
 		newRegularTriangle.fillFlag = fillFlag;
 		newRegularTriangle.move(MOVE_DX, MOVE_DY);

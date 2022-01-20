@@ -8,18 +8,18 @@ public class Isosceles extends Box {
 	protected boolean SOUTH;
 	protected boolean NORTH;
 	
-	Isosceles(Color color) {
-		super(color);
+	Isosceles(Color color, int thickness) {
+		super(color,thickness);
 		fillFlag = false;
 	}
 	
-	Isosceles(Color color, int x, int y) {	
-		super(color,x,y);
+	Isosceles(Color color, int thickness, int x, int y) {	
+		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	Isosceles(Color color, int x1, int y1, int x2, int y2) {	
-		super(color,x1,y1,x2,y2);
+	Isosceles(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
 	
@@ -97,7 +97,7 @@ public class Isosceles extends Box {
 	}	
 	
 	Figure copy() {
-		Isosceles newIsosceles = new Isosceles(color,x1,y1,x2,y2);
+		Isosceles newIsosceles = new Isosceles(color,thickness,x1,y1,x2,y2);
 		newIsosceles.popup = popup;
 		newIsosceles.fillFlag = fillFlag;
 		newIsosceles.move(MOVE_DX, MOVE_DY);
@@ -211,7 +211,7 @@ public class Isosceles extends Box {
 			SOUTH = false;
 			NORTH = true;
 		} 
-		Isosceles newIsosceles = new Isosceles(color,x1,y1,x2,y2);
+		Isosceles newIsosceles = new Isosceles(color,thickness,x1,y1,x2,y2);
 		return newIsosceles;
 	}
 	

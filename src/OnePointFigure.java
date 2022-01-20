@@ -7,12 +7,12 @@ abstract public class OnePointFigure extends Figure{
 	protected int x1;
 	protected int y1;
 	
-	OnePointFigure(Color color) {
-		super(color);
+	OnePointFigure(Color color, int thickness) {
+		super(color, thickness);
 	}
 
-	OnePointFigure(Color color, int x, int y) {
-		super(color);
+	OnePointFigure(Color color, int thickness, int x, int y) {
+		super(color, thickness);
 		x1 = x;
 		y1 = y;
 	}

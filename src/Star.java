@@ -3,8 +3,8 @@ import java.awt.*;
 class Star extends OnePointFigure {
 	private static final long serialVersionUID = 1L;
 
-	Star(Color color, int x1, int y1) {
-		super(color, x1, y1);
+	Star(Color color, int thickness, int x1, int y1) {
+		super(color, thickness, x1, y1);
 	}
 	
 	void drawStar(Graphics g, int ox, int oy, int radius) {
@@ -46,7 +46,7 @@ class Star extends OnePointFigure {
 	}
 
 	Figure copy() {
-		Point newStar = new Point(color, x1, y1);
+		Point newStar = new Point(color, thickness, x1, y1);
 		newStar.popup = popup;
 		newStar.move(20, 10);
 		return newStar;
