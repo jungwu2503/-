@@ -4,13 +4,13 @@ public class Saturn extends OnePointFigure {
 
 	private boolean fillFlag;
 	
-	Saturn(Color color, int thickness) {
-		super(color, thickness);
+	Saturn(Color color, float thickness) {
+		super(color, 0.1f);
 		fillFlag = false;
 	}
 	
-	Saturn(Color color, int thickness, int x, int y) {	
-		super(color,thickness,x,y);
+	Saturn(Color color, float thickness, int x, int y) {	
+		super(color,0.1f,x,y);
 		fillFlag = false;
 	}
 	
@@ -40,6 +40,7 @@ public class Saturn extends OnePointFigure {
 		g.drawOval(x1 - 3, y1 - 3, 2, 2);
 		g.fillOval(x1 - 3, y1 - 3, 3, 3);
 		g.setColor(color);
+		((Graphics2D)g).setStroke(new BasicStroke(0.1f));
 		g.drawOval(minX, minY, width, height);
 		g.drawArc(minX-70, minY+45, width*3/2+70, height-100, 124, 303);
 		

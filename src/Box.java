@@ -4,17 +4,17 @@ public class Box extends TwoPointFigure {
 
 	protected boolean fillFlag;
 	
-	Box(Color color, int thickness) {	
+	Box(Color color, float thickness) {	
 		super(color,thickness);
 		fillFlag = false;
 	}
 	
-	Box(Color color, int thickness, int x, int y) {	
+	Box(Color color, float thickness, int x, int y) {	
 		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	Box(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+	Box(Color color, float thickness, int x1, int y1, int x2, int y2) {	
 		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
@@ -30,9 +30,9 @@ public class Box extends TwoPointFigure {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
-		g.setColor(color);
-		//((Graphics2D)g).setStroke(new BasicStroke(4.0f));
-		g.drawRect(minX, minY, width, height);	
+		setColorAndStroke(g);
+		
+		g.drawRect(minX, minY, width, height);
 		
 		if (fillFlag == true) {
 			g.fillRect(minX, minY, width, height);

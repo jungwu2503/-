@@ -3,7 +3,7 @@ import java.awt.*;
 class Star extends OnePointFigure {
 	private static final long serialVersionUID = 1L;
 
-	Star(Color color, int thickness, int x1, int y1) {
+	Star(Color color, float thickness, int x1, int y1) {
 		super(color, thickness, x1, y1);
 	}
 	
@@ -37,7 +37,7 @@ class Star extends OnePointFigure {
 
 	void draw(Graphics g) {
 
-		g.setColor(color);
+		setColorAndStroke(g);
 		g.drawOval(x1 - 3, y1 - 3, 2, 2);
 		g.fillOval(x1 - 3, y1 - 3, 3, 3);
 		

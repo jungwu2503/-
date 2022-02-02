@@ -8,17 +8,17 @@ public class Isosceles extends Box {
 	protected boolean SOUTH;
 	protected boolean NORTH;
 	
-	Isosceles(Color color, int thickness) {
+	Isosceles(Color color, float thickness) {
 		super(color,thickness);
 		fillFlag = false;
 	}
 	
-	Isosceles(Color color, int thickness, int x, int y) {	
+	Isosceles(Color color, float thickness, int x, int y) {	
 		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	Isosceles(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+	Isosceles(Color color, float thickness, int x1, int y1, int x2, int y2) {	
 		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
@@ -33,9 +33,7 @@ public class Isosceles extends Box {
 		int minX = Math.min(x1, x2);
 		int minY = Math.min(y1, y2);
 		
-		g.setColor(color);
-		//int[] xPoints = { minX+width/2, minX, minX+width/3, minX+width/3, minX+width/3*2, minX+width/3*2, minX+width };
-		//int[] yPoints = { minY, minY+height, minY+height, minY+height/2*3, minY+height/2*3, minY+height, minY+height };
+		setColorAndStroke(g);
 		int[] xPoints = { minX+width/5*3, minX+width/5, minX+width/5*2, minX+width/5*2, minX+width/5*4, minX+width/5*4, minX+width };
 		int[] yPoints = { minY, minY+height/2, minY+height/2, minY+height, minY+height, minY+height/2, minY+height/2 };
 		

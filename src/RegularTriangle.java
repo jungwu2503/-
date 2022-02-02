@@ -4,17 +4,17 @@ public class RegularTriangle extends TwoPointFigure {
 	
 	protected boolean fillFlag;
 	
-	RegularTriangle(Color color, int thickness) {
+	RegularTriangle(Color color, float thickness) {
 		super(color, thickness);
 		fillFlag = false;
 	}
 	
-	RegularTriangle(Color color, int thickness, int x, int y) {		 
+	RegularTriangle(Color color, float thickness, int x, int y) {		 
 		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	RegularTriangle(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+	RegularTriangle(Color color, float thickness, int x1, int y1, int x2, int y2) {	
 		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
@@ -24,8 +24,7 @@ public class RegularTriangle extends TwoPointFigure {
 	}
 	
 	void draw(Graphics g) {
-		g.setColor(color);
-		//g.drawLine(x1, y1, x2, y2); 
+		setColorAndStroke(g);
 		
 		double deltaX = (double)(x2-x1);
 		double deltaY = (double)(y2-y1);

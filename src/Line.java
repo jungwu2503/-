@@ -11,19 +11,19 @@ public class Line extends TwoPointFigure {
 	static int TAILEND = 1;
 	static int HEADEND = 2;
 	
-	Line(Color color, int thickness) {
+	Line(Color color, float thickness) {
 		super(color, thickness);
 		hasTailFlag = false;
 		hasHeadFlag = false;
 	}
 	
-	Line(Color color, int thickness, int x, int y) {		 
+	Line(Color color, float thickness, int x, int y) {		 
 		super(color,thickness,x,y);
 		hasTailFlag = false;
 		hasHeadFlag = false;
 	}
 	
-	Line(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+	Line(Color color, float thickness, int x1, int y1, int x2, int y2) {	
 		super(color,thickness,x1,y1,x2,y2);
 		hasTailFlag = false;
 		hasHeadFlag = false;
@@ -63,8 +63,7 @@ public class Line extends TwoPointFigure {
 	
 	void draw(Graphics g) {		
 		
-		g.setColor(color);
-		//((Graphics2D)g).setStroke(new BasicStroke(4.0f));
+		setColorAndStroke(g);
 		g.drawLine(x1, y1, x2, y2); 
 		
 		if (hasTailFlag && !hasHeadFlag) {

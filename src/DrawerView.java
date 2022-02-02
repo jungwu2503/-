@@ -101,9 +101,7 @@ public class DrawerView extends JPanel
 			}
 			int maxHeight = lines.length * fm.getHeight();
 			
-			int thickness = canvas.setThickness();
-			
-			Text newFigure = new Text(Color.black, thickness, x, y, x+maxWidth, y+maxHeight, lines);
+			Text newFigure = new Text(Color.black, x, y, x+maxWidth, y+maxHeight, lines);
 			
 			newFigure.setPopup(canvas.textPopup());
 			canvas.addFigure(newFigure);
@@ -211,7 +209,8 @@ public class DrawerView extends JPanel
 	private boolean rulerOn = false;
 	
 	private double zoomRatio = 1.0;
-	private double thickness = 1.0;
+	private float thickness = 1.0f;
+	private String color; // =============
 	private int width = INIT_WIDTH;
 	private int height = INIT_HEIGHT;
 	
@@ -473,15 +472,14 @@ public class DrawerView extends JPanel
 		}
 	}
 	
-	public void setThickness(int ratio) {
-		thickness = (double)ratio;
+	public void setThickness(int thickness) {
+		this.thickness = (float)thickness;
 		repaint();
-		/*removeMouseListener(this);
-		removeMouseMotionListener(this);
-		if (ratio == 100) {
-			addMouseListener(this);
-			addMouseMotionListener(this);
-		}*/
+	}
+	
+	public void setColor(String color) { //=============
+		this.color = color;
+		repaint();
 	}
 	
 	@Override
@@ -551,41 +549,56 @@ public class DrawerView extends JPanel
 			return;
 		}
 		
-		int thickness = this.setThickness();
-		
+		Color newColor = Color.black;
+		if (color.equals("black")) {
+			newColor = Color.black;
+		} else if (color.equals("red")) {
+			newColor = Color.red;
+		} else if (color.equals("orange")) {
+			newColor = Color.orange;
+		} else if (color.equals("yellow")) {
+			newColor = Color.yellow;
+		} else if (color.equals("green")) {
+			newColor = Color.green;
+		} else if (color.equals("blue")) {
+			newColor = Color.blue;
+		} else if (color.equals("purple")) {
+			newColor = Color.magenta;
+		} 
+
 		if (whatToDraw == ID_POINT) {
-			selectedFigure = new Point(new Color(0,0,0),thickness,x,y);
+			selectedFigure = new Point(newColor,thickness,x,y);
 			selectedFigure.setPopup(pointPopup);
 		} else if (whatToDraw == ID_STAR) { 
-			selectedFigure = new Star(new Color(0,0,0),thickness,x,y);
+			selectedFigure = new Star(newColor,thickness,x,y);
 			selectedFigure.setPopup(starPopup);
 		} else if (whatToDraw == ID_BOX) {
-			selectedFigure = new Box(new Color(0,0,0),thickness,x,y);
+			selectedFigure = new Box(newColor,thickness,x,y);
 			selectedFigure.setPopup(boxPopup);
 		} else if (whatToDraw == ID_ISOSCELES) {
-			selectedFigure = new Isosceles(new Color(0,0,0),thickness,x,y);
+			selectedFigure = new Isosceles(newColor,thickness,x,y);
 			selectedFigure.setPopup(isoscelesPopup);
 		} else if (whatToDraw == ID_LINE) {
-			selectedFigure = new Line(Color.black,thickness,x,y);
+			selectedFigure = new Line(newColor,thickness,x,y);
 			selectedFigure.setPopup(linePopup);
 		} else if (whatToDraw == ID_RTRIANGLE) {
-			selectedFigure = new RegularTriangle(Color.black,thickness,x,y);
+			selectedFigure = new RegularTriangle(newColor,thickness,x,y);
 			selectedFigure.setPopup(rTrianglePopup);
 		} else if (whatToDraw == ID_CIRCLE) {
-			selectedFigure = new Circle(Color.black,thickness,x,y);
+			selectedFigure = new Circle(newColor,thickness,x,y);
 			selectedFigure.setPopup(circlePopup);
 		} else if (whatToDraw == ID_SATURN) {
-			selectedFigure = new Saturn(Color.black,thickness,x,y);
+			selectedFigure = new Saturn(newColor,thickness,x,y);
 			selectedFigure.setPopup(saturnPopup);
 		} else if (whatToDraw == ID_TV) {
-			selectedFigure = new TV(Color.black,thickness,x,y,true);
+			selectedFigure = new TV(newColor,thickness,x,y,true);
 			selectedFigure.setPopup(tvPopup);
 			addFigure(selectedFigure);
 			selectedFigure = null;
 			actionMode = NOTHING;
 			return;
 		} else if (whatToDraw == ID_KITE) {
-			selectedFigure = new Kite(new Color(0,0,0),thickness,x,y);
+			selectedFigure = new Kite(newColor,thickness,x,y);
 			selectedFigure.setPopup(kitePopup);
 		} else if (whatToDraw == ID_TEXT) {
 			selectedFigure = null;
@@ -679,10 +692,6 @@ public class DrawerView extends JPanel
 		if (selectedFigure == null) return;
 		selectedFigure.setColor(color);
 		repaint();
-	}
-	
-	public int setThickness() {
-		return 1; 
 	}
 	
 	public void showColorChooser() {

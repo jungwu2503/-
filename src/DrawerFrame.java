@@ -30,8 +30,12 @@ public class DrawerFrame extends JFrame {
 	
 	static class ThicknessBox extends JComboBox implements ActionListener {
 		DrawerView canvas;
-		static String[] thick = { "1", "5", "10" };
-		
+		//static String[] thick = { "1", "5", "10" };
+		static ImageIcon thinLine = new ImageIcon("thinLine.gif");
+		static ImageIcon normalLine = new ImageIcon("normalLine.gif");
+		static ImageIcon thickLine = new ImageIcon("thickLine.gif");
+		static ImageIcon[] thick = { thinLine, normalLine, thickLine }; 
+
 		ThicknessBox(DrawerView canvas) {
 			super(thick);
 			this.canvas = canvas;
@@ -41,10 +45,43 @@ public class DrawerFrame extends JFrame {
 		
 		public void actionPerformed(ActionEvent e) {
 			JComboBox box = (JComboBox) e.getSource();
-			String ratio = (String)box.getSelectedItem();
-			canvas.setThickness(Integer.parseInt(ratio));
-		}		
+			//String thickness = (String)box.getSelectedItem();
+			ImageIcon thicknessImage = (ImageIcon)box.getSelectedItem();
+			//System.out.println(thicknessImage);
+			int thickness = 1;
+			if (thicknessImage == null) {
+				thickness = 1;
+			} else if (thicknessImage == thinLine) {
+				thickness = 1;
+			} else if (thicknessImage == normalLine) {
+				thickness = 5;
+			} else if (thicknessImage == thickLine) {
+				thickness = 10;
+			}
+			
+			//canvas.setThickness(Integer.parseInt(thickness));
+			canvas.setThickness(thickness);
+		}
 		
+	} 
+	
+	static class ColorBox extends JComboBox implements ActionListener {
+		DrawerView canvas;
+		static String[] color = { "black", "red", "orange", "yellow", "green", "blue", "purple" };
+		
+		ColorBox(DrawerView canvas) {
+			super(color);
+			this.canvas = canvas;
+			setMaximumSize(new Dimension(1900, 200));
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			JComboBox box = (JComboBox) e.getSource();
+			String color = (String)box.getSelectedItem();
+			//if (color == null) color = "black";
+			canvas.setColor(color);
+		}		
 	}
 	
 	static class PrintableView implements Printable {
@@ -229,6 +266,7 @@ public class DrawerFrame extends JFrame {
 		//selectToolBar.add(new JSeparator());
 		selectToolBar.add(new ZoomBox(canvas));
 		selectToolBar.add(new ThicknessBox(canvas));
+		selectToolBar.add(new ColorBox(canvas));
 		selectToolBar.add(javax.swing.Box.createGlue());
 		container.add(selectToolBar,BorderLayout.NORTH);
 		

@@ -48,7 +48,7 @@ public class FigureDialog extends JDialog {
 		JRadioButton chooserButton;
 		
 		Color color;
-		int thickness;
+		float thickness;
 		JDialog dialog;
 		DrawerView view;
 		

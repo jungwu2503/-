@@ -1,21 +1,23 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Circle extends TwoPointFigure {
 
 	private boolean fillFlag;
 	
-	Circle(Color color, int thickness) {
+	Circle(Color color, float thickness) {
 		super(color, thickness);
 		fillFlag = false;
 	}
 	
-	Circle(Color color, int thickness, int x, int y) {	
+	Circle(Color color, float thickness, int x, int y) {	
 		super(color,thickness,x,y);
 		fillFlag = false;
 	}
 	
-	Circle(Color color, int thickness, int x1, int y1, int x2, int y2) {	
+	Circle(Color color, float thickness, int x1, int y1, int x2, int y2) {	
 		super(color,thickness,x1,y1,x2,y2);
 		fillFlag = false;
 	}
@@ -38,7 +40,7 @@ public class Circle extends TwoPointFigure {
 		int width = Math.abs(x2-x1);
 		int height = Math.abs(y2-y1);
 		
-		g.setColor(color);
+		setColorAndStroke(g);
 		g.drawOval(minX, minY, width, height);
 		
 		if (fillFlag == true) {

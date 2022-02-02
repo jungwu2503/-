@@ -1,18 +1,20 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Point extends OnePointFigure {
 
-	Point(Color color, int thickness) {	
+	Point(Color color, float thickness) {	
 		super(color, thickness);
 	}
 	
-	Point(Color color, int thickness, int x, int y) {	
+	Point(Color color, float thickness, int x, int y) {	
 		super(color,thickness,x,y);
 	}
 	
 	void draw(Graphics g) {		
-		g.setColor(color);
+		setColorAndStroke(g);
 		g.drawOval(x1-GAP, y1-GAP, 2*GAP-1, 2*GAP-1);
 		g.fillOval(x1-GAP, y1-GAP, 2*GAP, 2*GAP);
 	}	

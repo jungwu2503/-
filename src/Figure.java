@@ -11,9 +11,9 @@ abstract public class Figure implements Serializable {
 	protected Polygon region;
 	transient protected Popup popup;
 	protected Color color;
-	protected int thickness;
+	protected float thickness;
 	
-	Figure(Color color, int thickness) {
+	Figure(Color color, float thickness) {
 		this.color = color;
 		this.thickness = thickness;
 		region = null;
@@ -25,7 +25,7 @@ abstract public class Figure implements Serializable {
 	void setColor(Color color) {
 		this.color = color;
 	}
-	void setThickness(int thickness) {
+	void setThickness(float thickness) {
 		this.thickness = thickness;
 	}
 	void setPopup(Popup popup) {
@@ -54,7 +54,10 @@ abstract public class Figure implements Serializable {
 		setXY2(newX,newY);
 		draw(g);
 	}
-	
+	void setColorAndStroke(Graphics g) {
+		g.setColor(color);
+		((Graphics2D)g).setStroke(new BasicStroke(thickness));
+	}
 	// hook function
 	int getX1() {
 		return -1;
